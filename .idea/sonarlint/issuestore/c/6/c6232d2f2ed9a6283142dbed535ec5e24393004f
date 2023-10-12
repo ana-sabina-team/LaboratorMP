@@ -1,0 +1,42 @@
+
+”
+java:S1120"wMake this line start after 2 spaces instead of 4 in order to indent the code consistently. (Indentation level is at 2.)(óÎç§8åÑöƒ²1
+”
+java:S1120"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(Û•îÃ8æÑöƒ²1
+”
+java:S1120"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(®÷Ñ8æÑöƒ²1
+”
+java:S1120"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(½¸Êç8æÑöƒ²1
+”
+java:S1120"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(Ê÷³¹8æÑöƒ²1
+•
+java:S1120 "xMake this line start after 6 spaces instead of 12 in order to indent the code consistently. (Indentation level is at 2.)(½¦Â8æÑöƒ²1
+”
+java:S1120'"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(®÷Ñ8æÑöƒ²1
+”
+java:S1120,"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(®÷Ñ8æÑöƒ²1
+b	java:S112"FDefine and throw a dedicated exception instead of using a generic one.(®÷Ñ8æÑöƒ²1
+b	java:S112'"FDefine and throw a dedicated exception instead of using a generic one.(®÷Ñ8æÑöƒ²1
+b	java:S112,"FDefine and throw a dedicated exception instead of using a generic one.(®÷Ñ8æÑöƒ²1
+q
+java:S1192"TDefine a constant instead of duplicating this literal "not yet implemented" 3 times.(®÷Ñ8çÑöƒ²1
+|
+java:S1488"_Immediately return this expression instead of assigning it to the temporary variable "clients".(½¸Êç8èÑöƒ²1
+{	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(´ßšúÿÿÿÿ8èÑöƒ²1
+c
+java:S1106
+"AMove this left curly brace to the beginning of next line of code.(Â‘íÊùÿÿÿÿ8èÑöƒ²1
+c
+java:S1106"AMove this left curly brace to the beginning of next line of code.(­ıÉˆıÿÿÿÿ8éÑöƒ²1
+^
+java:S1106"AMove this left curly brace to the beginning of next line of code.(ƒ€Ê‹8éÑöƒ²1
+^
+java:S1106"AMove this left curly brace to the beginning of next line of code.(õ¼Ú8éÑöƒ²1
+^
+java:S1106"AMove this left curly brace to the beginning of next line of code.(¢µ£û8éÑöƒ²1
+^
+java:S1106"AMove this left curly brace to the beginning of next line of code.(Ê÷³¹8éÑöƒ²1
+c
+java:S1106&"AMove this left curly brace to the beginning of next line of code.(Ã‹è¶şÿÿÿÿ8éÑöƒ²1
+c
+java:S1106+"AMove this left curly brace to the beginning of next line of code.(–äü±øÿÿÿÿ8éÑöƒ²1
