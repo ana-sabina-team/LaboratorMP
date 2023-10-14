@@ -1,0 +1,53 @@
+
+™
+java:S1120"wMake this line start after 2 spaces instead of 4 in order to indent the code consistently. (Indentation level is at 2.)(¼‰Ûûÿÿÿÿ8ùâƒ²1
+”
+java:S1120"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(ï®’ü8úâƒ²1
+”
+java:S1120"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(€½í˜8úâƒ²1
+”
+java:S1120"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(ê¦ÄŸ8úâƒ²1
+”
+java:S1120"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(»ÅÜ‚8úâƒ²1
+™
+java:S1120 "wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(•÷Åùÿÿÿÿ8úâƒ²1
+•
+java:S1120#"xMake this line start after 4 spaces instead of 34 in order to indent the code consistently. (Indentation level is at 2.)(Ë„Öè8úâƒ²1
+™
+java:S1120&"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(ŞæŞ¨ùÿÿÿÿ8úâƒ²1
+•
+java:S1120)"xMake this line start after 4 spaces instead of 25 in order to indent the code consistently. (Indentation level is at 2.)(Ùö·±8úâƒ²1
+™
+java:S1120,"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(ú­³Ìúÿÿÿÿ8úâƒ²1
+”
+java:S11201"wMake this line start after 4 spaces instead of 8 in order to indent the code consistently. (Indentation level is at 2.)(ûÛ†°8úâƒ²1
+r	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(œ¥ˆùÿÿÿÿ8ıâƒ²1
+m	java:S117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ºÜó8ıâƒ²1
+t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(¸×øÿÿÿÿ
+c
+java:S1106"AMove this left curly brace to the beginning of next line of code.(â¬èÛüÿÿÿÿ8ğ…âƒ²1
+c
+java:S1106"AMove this left curly brace to the beginning of next line of code.(œ¥ˆùÿÿÿÿ8şâƒ²1
+c
+java:S1106"AMove this left curly brace to the beginning of next line of code.(¼æëÆúÿÿÿÿ8şâƒ²1
+^
+java:S1106"AMove this left curly brace to the beginning of next line of code.(ºÜó8şâƒ²1
+c
+java:S1106"AMove this left curly brace to the beginning of next line of code.(“–²ùÿÿÿÿ8şâƒ²1
+^
+java:S1106"AMove this left curly brace to the beginning of next line of code.(ƒßù8şâƒ²1
+^
+java:S1106#"AMove this left curly brace to the beginning of next line of code.(Ë„Öè8şâƒ²1
+^
+java:S1106%"AMove this left curly brace to the beginning of next line of code.(«Æë8şâƒ²1
+^
+java:S1106)"AMove this left curly brace to the beginning of next line of code.(Ùö·±8şâƒ²1
+c
+java:S1106+"AMove this left curly brace to the beginning of next line of code.(›ˆ‹Šÿÿÿÿÿ8şâƒ²1
+^
+java:S11060"AMove this left curly brace to the beginning of next line of code.(Á»›ê8ÿâƒ²1
+ƒ
+java:S4165,"aRemove this useless assignment; "age" already holds the assigned value along all execution paths.(ú­³Ìúÿÿÿÿ8‚Ÿâƒ²1
+o	java:S116"NRename this field "CNP" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(¼‰Ûûÿÿÿÿ8‚Ÿâƒ²1
+Q
+java:S1656,"/Remove or correct this useless self-assignment.(ú­³Ìúÿÿÿÿ8‰Ÿâƒ²1
