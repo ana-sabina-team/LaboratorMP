@@ -1,7 +1,7 @@
-package labMP_Book_Store.main.UI;
+package main.UI;
 
-import labMP_Book_Store.main.model.Client;
-import labMP_Book_Store.main.service.ClientService;
+import main.domain.Client;
+import main.service.ClientService;
 
 import java.util.Scanner;
 import java.util.Set;

@@ -1,6 +1,6 @@
-package labMP_Book_Store.main.repository;
+package main.repository;
 
-import labMP_Book_Store.main.model.Client;
+import main.domain.Client;
 
 import java.util.HashMap;
 import java.util.Map;

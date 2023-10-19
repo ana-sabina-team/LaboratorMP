@@ -1,7 +1,9 @@
-import labMP_Book_Store.main.UI.Console;
-import labMP_Book_Store.main.repository.ClientRepository;
-import labMP_Book_Store.main.repository.ClientRepositoryImpl;
-import labMP_Book_Store.main.service.ClientService;
+package main;
+
+import main.UI.Console;
+import main.repository.ClientRepository;
+import main.repository.ClientRepositoryImpl;
+import main.service.ClientService;
 
 public class Main {
     public static void main(String[] args) {

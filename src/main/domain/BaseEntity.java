@@ -1,4 +1,4 @@
-package labMP_Book_Store.main.model;
+package main.domain;
 
 public class BaseEntity<ID> {
     private ID id;

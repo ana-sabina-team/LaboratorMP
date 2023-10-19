@@ -1,7 +1,7 @@
-package labMP_Book_Store.main.service;
+package main.service;
 
-import labMP_Book_Store.main.model.Client;
-import labMP_Book_Store.main.repository.ClientRepository;
+import main.domain.Client;
+import main.repository.ClientRepository;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -1,6 +1,6 @@
-package labMP_Book_Store.main.model;
+package main.domain;
 
-public class Client extends BaseEntity<Long>{
+public class Client extends BaseEntity<Long> {
     private String CNP;
     private String lastName;
 
