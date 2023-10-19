@@ -1,7 +1,7 @@
-package ro.ntt.catalog.service;
+package src.main.ro.ntt.catalog.service;
 
-import ro.ntt.catalog.model.Book;
-import ro.ntt.catalog.repository.BookRepository;
+import src.main.ro.ntt.catalog.domain.Book;
+import src.main.ro.ntt.catalog.repository.BookRepository;
 
 import java.util.HashSet;
 import java.util.Set;

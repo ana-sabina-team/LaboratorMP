@@ -1,14 +1,13 @@
-package ro.ntt.catalog.repository;
-import ro.ntt.catalog.model.Book;
+package src.main.ro.ntt.catalog.repository;
+import src.main.ro.ntt.catalog.domain.Book;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 public class BookRepositorylmpl implements BookRepository{
 
 
-    private Map<Long,Book> entities;
+    private Map<Long, Book> entities;
     /*id=book*/
 
 

@@ -1,9 +1,8 @@
-package ro.ntt.catalog.ui;
+package src.main.ro.ntt.catalog.UI;
 
-import ro.ntt.catalog.model.Book;
-import ro.ntt.catalog.service.BookService;
+import src.main.ro.ntt.catalog.domain.Book;
+import src.main.ro.ntt.catalog.service.BookService;
 
-import java.sql.SQLOutput;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

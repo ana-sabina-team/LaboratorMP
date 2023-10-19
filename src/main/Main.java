@@ -6,7 +6,7 @@ import ro.ntt.catalog.ui.Console;
 public class Main {
     public static void main(String[] args) {
 
-        BookRepository bookRepository=new BookRepositorylmpl() ;
+        BookRepository bookRepository= (BookRepository) new BookRepositorylmpl();
 
         BookService bookService=new BookService(bookRepository);
 

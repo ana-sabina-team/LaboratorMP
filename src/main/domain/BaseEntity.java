@@ -1,4 +1,4 @@
-package ro.ntt.catalog.model;
+package src.main.ro.ntt.catalog.domain;
 
 
 //ID - generic type, putem trimite orice tip din clasa parinte in functie de ce tip are ID-ul

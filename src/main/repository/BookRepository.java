@@ -1,5 +1,5 @@
-package ro.ntt.catalog.repository;
-import ro.ntt.catalog.model.Book;
+package src.main.ro.ntt.catalog.repository;
+import src.main.ro.ntt.catalog.domain.Book;
 
 import java.util.Iterator;
 

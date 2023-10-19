@@ -1,4 +1,4 @@
-package ro.ntt.catalog.model;
+package src.main.ro.ntt.catalog.domain;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
