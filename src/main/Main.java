@@ -1,24 +1,19 @@
-import ro.ntt.catalog.repository.BookRepository;
-import ro.ntt.catalog.repository.BookRepositorylmpl;
-import ro.ntt.catalog.service.BookService;
-import ro.ntt.catalog.ui.Console;
+package main;
+
+import main.UI.Console;
+import main.repository.ClientRepository;
+import main.repository.ClientRepositoryImpl;
+import main.service.ClientService;
 
 public class Main {
     public static void main(String[] args) {
 
-        BookRepository bookRepository= (BookRepository) new BookRepositorylmpl();
-
-        BookService bookService=new BookService(bookRepository);
-
-        Console console=new Console(bookService);
+        ClientRepository clientRepository = new ClientRepositoryImpl();
+        ClientService clientService = new ClientService(clientRepository);
+        Console console = new Console(clientService);
 
         console.runMenu();
 
-        System.out.println("BYE");
-
-
-
-
-
+        System.out.println("bye");
     }
 }

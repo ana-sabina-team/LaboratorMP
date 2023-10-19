@@ -1,5 +1,5 @@
-package src.main.ro.ntt.catalog.repository;
-import src.main.ro.ntt.catalog.domain.Book;
+package main.repository;
+import main.domain.Book;
 
 import java.util.*;
 
@@ -56,12 +56,6 @@ public class BookRepositorylmpl implements BookRepository{
             entities.put(entity.getId(),entity);
          return entity;
         }
-
-
-
-
-
-
 
     }
 

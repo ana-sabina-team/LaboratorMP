@@ -1,4 +1,4 @@
-package src.main.ro.ntt.catalog.domain;
+package main.domain;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

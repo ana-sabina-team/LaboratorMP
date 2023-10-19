@@ -1,27 +1,22 @@
-package src.main.ro.ntt.catalog.UI;
+package main.UI;
 
-import src.main.ro.ntt.catalog.domain.Book;
-import src.main.ro.ntt.catalog.service.BookService;
+import main.domain.Client;
+import main.service.ClientService;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Scanner;
 import java.util.Set;
 
 public class Console {
+    private ClientService clientService;
 
-    private BookService bookService;
-
-    public Console(BookService bookService) {
-        this.bookService = bookService;
+    public Console(ClientService clientService) {
+        this.clientService = clientService;
     }
 
     public void runMenu() {
         printMenu();
 
         Scanner scanner = new Scanner(System.in);
-
 
         while (true) {
             String option = scanner.next();
@@ -30,10 +25,10 @@ public class Console {
             }
             switch (option) {
                 case "1":
-                    addBooK();
+                    addClient();
                     break;
                 case "2":
-                    printBook();
+                    printClients();
                     break;
                 default:
                     System.out.println("this option is not yet implemented");
@@ -42,50 +37,37 @@ public class Console {
         }
     }
 
-
-    private void printBook() {
-        System.out.println("All books -->");
-        Set<Book> books = bookService.getAllBooks();
-        books.forEach(System.out::println);
+    private void printClients() {
+        System.out.println("All clients: \n");
+        Set<Client> clients = clientService.getAllClients();
+        clients.forEach(System.out::println);
     }
 
-
-    private void addBooK() {
+    private void addClient() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("id= ");
-        long id = scanner.nextLong();
 
-        System.out.println("Title? ");
-        String title = scanner.next();
+        System.out.println("id = ");
+        Long id = scanner.nextLong();
 
-        System.out.println("Author? ");
-        String author = scanner.next();
+        System.out.println("CNP = ");
+        String CNP = scanner.next();
 
+        System.out.println("Last name = ");
+        String lastName = scanner.next();
 
-        System.out.println("Date of publication? (format: yyyy-MM-dd)");
-        String dateInput = scanner.next();
+        System.out.println("First name = ");
+        String firstName = scanner.next();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = dateFormat.parse(dateInput);
-            System.out.println("You entered: " + date);
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please use yyyy-MM-dd.");
-        }
+        System.out.println("Age = ");
+        int age = scanner.nextInt();
 
-        Book book = new Book(id, title, author, date);
-        bookService.addBook(book);
-
-
+        Client client = new Client(id, CNP, lastName, firstName, age);
+        clientService.addClient(client);
     }
-
 
     private void printMenu() {
-        System.out.println("1 - Add Book\n" +
-                "2 - Print all Books\n" +
+        System.out.println("1 - Add Client\n" +
+                "2 - Print all clients\n" +
                 "x - Exit");
     }
-
-
 }
