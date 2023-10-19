@@ -4,7 +4,7 @@ import main.domain.Book;
 import java.util.*;
 
 
-public class BookRepositorylmpl implements BookRepository{
+public class BookRepositoryImpl implements BookRepository{
 
 
     private Map<Long, Book> entities;
@@ -13,7 +13,7 @@ public class BookRepositorylmpl implements BookRepository{
 
     //constructor:The constructor initializes the entities field as a new instance of HashMap.
     // This means the repository starts with an empty collection of students.
-    public BookRepositorylmpl(){
+    public BookRepositoryImpl(){
         this.entities=new HashMap<>();
     }
 
