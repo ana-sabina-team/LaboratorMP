@@ -14,7 +14,7 @@ public class Main {
 
         console.runMenu();
 
-        System.out.println("BYE");
+        System.out.println(" BYE");
 
 
 
