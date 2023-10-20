@@ -1,6 +1,0 @@
-
-”
-java:S1120"wMake this line start after 2 spaces instead of 4 in order to indent the code consistently. (Indentation level is at 2.)(‚õåÂ8š¹çƒ²1
-t	java:S120"ZRename this package name to match the regular expression '^[a-z_]+(\.[a-z_][a-z0-9_]*)*$'.(´ßšúÿÿÿÿ
-c
-java:S1106"AMove this left curly brace to the beginning of next line of code.(«¨’äùÿÿÿÿ8Ğ¡çƒ²1
