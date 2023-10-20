@@ -1,7 +1,5 @@
 package main.domain.validators;
 
 public interface Validator<T> {
-
-    void validate(T entity) ;
-
+    void validate(T entity) throws ValidatorException;
 }

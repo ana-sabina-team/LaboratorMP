@@ -54,7 +54,6 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
 
 
     @Override
-
     public Optional<T> delete(ID id) {
 
         if (id == null) {

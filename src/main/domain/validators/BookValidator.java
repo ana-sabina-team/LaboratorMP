@@ -35,7 +35,5 @@ public class BookValidator implements Validator<Book> {
             throw new ValidatorException("title cannot be null and empty");
         }
 
-
-
     }
 }

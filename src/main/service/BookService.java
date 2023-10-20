@@ -8,14 +8,11 @@ import java.util.Optional;
 import java.util.Set;
 
 public class BookService {
-
-
     private Repository<Long, Book> bookRepository;
 
     public BookService(Repository<Long, Book> bookRepository) {
         this.bookRepository = bookRepository;
     }
-
 
     public void addBook(Book book) {
         bookRepository.save(book);
@@ -50,10 +47,6 @@ public class BookService {
 
     }
 
-
-
-
-
     public Set<Book> filterBooksByTitle(String s) {
         Iterable<Book> books = bookRepository.findAll();
         Set<Book> filteredBooks= new HashSet<>();
@@ -65,6 +58,4 @@ public class BookService {
 
         return filteredBooks;
     }
-
-
 }

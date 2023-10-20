@@ -7,7 +7,7 @@ import main.domain.validators.BookValidator;
 import main.domain.validators.ClientValidator;
 import main.domain.validators.Validator;
 import main.repository.BookFileRepository;
-import main.repository.ClientRepositoryImpl;
+import main.repository.ClientFileRepository;
 import main.repository.Repository;
 import main.service.BookService;
 import main.service.ClientService;
@@ -15,10 +15,10 @@ import main.service.ClientService;
 public class Main {
     public static void main(String[] args) {
         Validator<Client> clientValidator = new ClientValidator();
-        ClientRepositoryImpl clientRepository = new ClientRepositoryImpl(clientValidator);
+        Repository<Long, Client> clientRepository = new ClientFileRepository(clientValidator, "C:/Users/Sabina/IdeaProjects/LaboratorMP/src/ClientFile");
         ClientService clientService = new ClientService(clientRepository);
 
-        BookValidator bookValidator = new BookValidator();
+        Validator<Book> bookValidator = new BookValidator();
         Repository<Long, Book> bookRepository = new BookFileRepository(bookValidator, "C:\\Users\\Alex\\OneDrive\\Documents\\GitHub\\LaboratorMP\\src\\BookFile");
         BookService bookService = new BookService(bookRepository);
 
@@ -28,6 +28,4 @@ public class Main {
 
         System.out.println("bye");
     }
-
-
 }
