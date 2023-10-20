@@ -1,61 +1,20 @@
 package main.repository;
 import main.domain.Book;
+import main.domain.validators.Validator;
 
 import java.util.*;
 
 
-public class BookRepositoryImpl implements BookRepository{
-
-
-    private Map<Long, Book> entities;
-    /*id=book*/
+public class BookRepositoryImpl extends InMemoryRepository<Long,Book> {
 
 
     //constructor:The constructor initializes the entities field as a new instance of HashMap.
     // This means the repository starts with an empty collection of students.
-    public BookRepositoryImpl(){
-        this.entities=new HashMap<>();
+
+
+    public BookRepositoryImpl(Validator<Book> bookValidator) {
+        super(bookValidator); // apeleaza constructorul la clasa parinte InMemoryRepository
     }
-
-
-    @Override
-    public Book fiindPme(Long id) {
-        return null;
-    }
-
-    @Override
-    public Iterator<Book> findOne() {
-        return null;
-    }
-
-    @Override
-   public Iterable<Book> findAll(){
-        return entities.values();
-    }
-
-
-    @Override
-    public Book save(Book entity) {
-        Optional<Book> existing = Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
-        return existing.orElse(null);
-    }
-
-
-    @Override
-    public Book delete(Long id) {
-        entities.remove(id);
-        return null;
-    }
-
-
-    @Override
-    public Book update(Book entity) throws Exception {
-        if (entities.containsKey(entity.getId())) {
-            throw new Exception("there is no entity with the id  " + entity.getId());
-        }
-            entities.put(entity.getId(),entity);
-         return entity;
-        }
 
     }
 

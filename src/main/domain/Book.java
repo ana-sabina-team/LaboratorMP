@@ -17,6 +17,14 @@ public class Book extends BaseEntity<Long> {
         this.yearOfPublication = yearOfPublication;
     }
 
+
+    public Book(Long id,String title,String author){
+         super(id);
+         this.title=title;
+         this.author=author;
+
+
+    }
     public String getTitle() {
         return title;
     }

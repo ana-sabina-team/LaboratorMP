@@ -1,15 +1,15 @@
 package main.service;
 
 import main.domain.Client;
-import main.repository.ClientRepository;
+import main.repository.ClientRepositoryImpl;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class ClientService {
-    private ClientRepository clientRepository;
+    private ClientRepositoryImpl clientRepository;
 
-    public ClientService(ClientRepository clientRepository) {
+    public ClientService(ClientRepositoryImpl clientRepository) {
 
         this.clientRepository = clientRepository;
     }
@@ -21,7 +21,12 @@ public class ClientService {
 
     public Set<Client> getAllClients() {
         Set<Client> clients = new HashSet<>();
-        clientRepository.findAll().forEach(clients::add);
+        clientRepository.
+                findAll().forEach(clients::add);
         return clients;
     }
+
+
+
+
 }
