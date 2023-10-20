@@ -1,12 +1,11 @@
 package main.repository;
 
 import main.domain.BaseEntity;
-import main.domain.Client;
 import main.domain.validators.ValidatorException;
 
 import java.util.Optional;
 
-public interface ClientRepository <ID, T extends BaseEntity<ID>>{
+public interface Repository<ID, T extends BaseEntity<ID>>{
     Optional<T> findOne(ID id);
 
     Iterable<T> findAll();

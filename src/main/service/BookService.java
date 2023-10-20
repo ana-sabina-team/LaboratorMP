@@ -1,30 +1,38 @@
 package main.service;
 
 import main.domain.Book;
-import main.repository.BookRepository;
+
+import main.domain.validators.ValidatorException;
+import main.repository.Repository;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class BookService {
+    private Repository<Long, Book> repository;
 
+    public BookService(Repository<Long, Book> repository) {
 
-    private BookRepository bookRepository;
-
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
+        this.repository = repository;
     }
 
-
-    public void addBook(Book book) {
-        bookRepository.save(book);
+    public void addBook(Book book) throws ValidatorException {
+        repository.save(book);
     }
 
     public Set<Book> getAllBooks() {
-        Set<Book> books = new HashSet<>();
-        bookRepository
-                .findAll() //Read all books from bookRepository
-                .forEach(books::add); //For each book in bookRepository we add it to the books Set
-        return books;
+        Iterable<Book> books = repository.findAll();
+        return StreamSupport.stream(books.spliterator(), false).collect(Collectors.toSet());
+    }
+
+    public Set<Book> filterBooksByLastName(String s) {
+        Iterable<Book> books = repository.findAll();
+        Set<Book> filteredBooks= new HashSet<>();
+        books.forEach(filteredBooks::add);
+        filteredBooks.removeIf(book -> !book.getTitle().contains(s));
+
+        return filteredBooks;
     }
 }

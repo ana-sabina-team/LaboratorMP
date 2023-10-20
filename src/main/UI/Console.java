@@ -2,68 +2,127 @@
 package main.UI;
 
 import main.domain.Client;
+import main.domain.validators.ValidatorException;
 import main.service.ClientService;
-import main.domain.Book;
-import main.service.BookService;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
 
 public class Console {
-
+    private Scanner scanner;
     private ClientService clientService;
-    private BookService bookService;
-    public Console (ClientService clientService, BookService bookService) {
+    public Console (ClientService clientService) {
+
         this.clientService = clientService;
-        this.bookService = bookService;
     }
+
+
     private void printMenu() {
-        System.out.println("1 - Add Client\n" +
-                "2 - Add Book\n" +
-                "3 - Print all clients\n" +
-                "4 - Print all Books\n" +
+        System.out.println("1 - Client\n" +
+                "2 - Book\n" +
                 "x - Exit");
     }
         public void runMenu () {
-            printMenu();
+            while (true) {
+            this.printMenu();
 
             Scanner scanner = new Scanner(System.in);
-
-            while (true) {
                 String option = scanner.next();
                 if (option.equals("x")) {
-                    break;
+                   break;
                 }
                 switch (option) {
                     case "1":
-                        addClient();
+                        this.runSubmenuClient();
                         break;
                     case "2":
-                        addBooK();
-                        break;
-                    case "3":
-                        printClients();
-                        break;
-                    case "4":
-                        printBook();
+//                        this.runSubmenuBook();
                         break;
                     default:
                         System.out.println("this option is not yet implemented");
                 }
-                printMenu();
+//                printMenu();
             }
         }
 
+    private void runSubmenuClient() {
+        while (true) {
+            System.out.println("1. Manual add");
+            System.out.println("2. To file add");
+            System.out.println("3. Print");
+            System.out.println("4. Search by last name");
+            System.out.println("5. Update client");
+            System.out.println("6. Delete client");
+            System.out.println("0. Back");
+
+            Scanner scanner = new Scanner(System.in);
+            String option = scanner.next();
+
+            switch (option) {
+                case "1":
+                    this.addClientManual();
+                    break;
+                case "2":
+                    this.addClientFile();
+                    break;
+                case "3":
+                    this.printClients();
+                    break;
+                case "4":
+                    this.filterClients();
+                    break;
+                case "5":
+                    this.updateClient();
+                    break;
+                case "6":
+                    this.deleteClient();
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
+
+//    private void runSubmenuBook() {
+//        while (true) {
+//            this.showMenu();
+//
+//            int option = scanner.nextInt();
+//
+//            switch (option) {
+//                case "1":
+//                    this.runSubmenuClient();
+//                    break;
+//                case "2":
+//                    this.runSubmenuBook();
+//                    break;
+//                case "3":
+//                    this.runSubmenuClient();
+//                    break;
+//                case "4":
+//                    this.runSubmenuBook();
+//                    break;
+//                default:
+//                    System.out.println("Invalid option.");
+//
+//            }
+//        }
+//    }
 
         private void printClients () {
             System.out.println("All clients: \n");
             Set<Client> clients = clientService.getAllClients();
-            clients.forEach(System.out::println);
+            clients.stream().forEach(System.out::println);
         }
 
-        private void addClient () {
+        private void addClientManual () {
             Scanner scanner = new Scanner(System.in);
 
             System.out.println("id = ");
@@ -86,40 +145,70 @@ public class Console {
         }
 
 
-        private void printBook() {
-            System.out.println("All books -->");
-            Set<Book> books = bookService.getAllBooks();
-            books.forEach(System.out::println);
-        }
+    private void addClientFile() {
 
-
-        private void addBooK () {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("id= ");
-            long id = scanner.nextLong();
-
-            System.out.println("Title? ");
-            String title = scanner.next();
-
-            System.out.println("Author? ");
-            String author = scanner.next();
-
-
-            System.out.println("Date of publication? (format: yyyy-MM-dd)");
-            String dateInput = scanner.next();
-
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date date = null;
-            try {
-                date = dateFormat.parse(dateInput);
-                System.out.println("You entered: " + date);
-            } catch (ParseException e) {
-                System.out.println("Invalid date format. Please use yyyy-MM-dd.");
+            Client client = readClient();
+            if (client == null || client.getId() < 0) {
             }
+            try {
+                clientService.addClient(client);
+            } catch (ValidatorException e) {
+                e.printStackTrace();
+            }
+    }
 
-            Book book = new Book(id, title, author, date);
-            bookService.addBook(book);
-        }
+
+    private void filterClients() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Searching for: ");
+        String search = scanner.next();
+        Set<Client> students = clientService.filterClientsByLastName(search);
+        students.stream().forEach(System.out::println);
 
     }
 
+    public void updateClient() {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("enter the ID of the client you want to UPDATE ");
+            long idToUpdate= scanner.nextInt();
+            System.out.println("Enter the new Last Name");
+            String newTitle= scanner.next();
+            System.out.println("Enter the new First Name");
+            String newAuthor= scanner.next();
+            this.clientService.updateClient(idToUpdate,newTitle,newAuthor);
+
+        }catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteClient(){
+
+        System.out.println("Enter the ID of the client you want to delete  ");
+        Scanner scanner = new Scanner(System.in);
+        long id=scanner.nextLong();
+        clientService.deleteClient(id);
+    }
+
+    private Client readClient() {
+        System.out.println("Read client {id, CNP, lastName, firstName, age}");
+
+        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+        try {
+            Long id = Long.valueOf(bufferRead.readLine());// ...
+            String CNP = bufferRead.readLine();
+            String lastName = bufferRead.readLine();
+            String firstName = bufferRead.readLine();
+            int age = Integer.parseInt(bufferRead.readLine());// ...
+
+            Client client = new Client(id, CNP, lastName,firstName, age);
+            client.setId(id);
+
+            return client;
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+    }
+}
