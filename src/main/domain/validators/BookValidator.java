@@ -2,26 +2,18 @@ package main.domain.validators;
 
 import main.domain.Book;
 
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
 
 public class BookValidator implements Validator<Book> {
 
 
     @Override
     public void validate(Book entity) throws ValidatorException {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate yearOfPublication = entity.getYearOfPublication();
 
-        Date currentDate = new Date();
-        Date yearOfPublication = entity.getYearOfPublication();
-
-        Calendar currentYear = Calendar.getInstance();
-        currentYear.setTime(currentDate);
-
-        Calendar publicationYear = Calendar.getInstance();
-        publicationYear.setTime(yearOfPublication);
-
-        int currentYearValue = currentYear.get(Calendar.YEAR);
-        int publicationYearValue = publicationYear.get(Calendar.YEAR);
+        int currentYearValue = currentDate.getYear();
+        int publicationYearValue = yearOfPublication.getYear();
 
         if (publicationYearValue > currentYearValue) {
             throw new ValidatorException("year of publication cannot be in the future");

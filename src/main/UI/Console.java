@@ -10,11 +10,11 @@ import main.service.ClientService;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.Scanner;
 import java.util.Set;
+
+import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
 
 public class Console {
     private ClientService clientService;
@@ -46,7 +46,6 @@ public class Console {
     public void runMenu() {
         while (true) {
             this.printMenu();
-
             Scanner scanner = new Scanner(System.in);
             String option = scanner.next();
             if (option.equals("x")) {
@@ -62,7 +61,6 @@ public class Console {
                 default:
                     System.out.println("this option is not yet implemented");
             }
-            printMenu();
         }
     }
 
@@ -105,32 +103,6 @@ public class Console {
             }
         }
     }
-
-//    private void runSubmenuBook() {
-//        while (true) {
-//            this.showMenu();
-//
-//            int option = scanner.nextInt();
-//
-//            switch (option) {
-//                case "1":
-//                    this.runSubmenuClient();
-//                    break;
-//                case "2":
-//                    this.runSubmenuBook();
-//                    break;
-//                case "3":
-//                    this.runSubmenuClient();
-//                    break;
-//                case "4":
-//                    this.runSubmenuBook();
-//                    break;
-//                default:
-//                    System.out.println("Invalid option.");
-//
-//            }
-//        }
-//    }
 
     private void printClients() {
         System.out.println("All clients: \n");
@@ -278,14 +250,9 @@ public class Console {
         System.out.println("Date of publication? (format: yyyy-MM-dd)");
         String dateInput = scanner.next();
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = null;
-        try {
-            date = dateFormat.parse(dateInput);
-            System.out.println("You entered: " + date);
-        } catch (ParseException e) {
-            System.out.println("Invalid date format. Please use yyyy-MM-dd.");
-        }
+        LocalDate date = null;
+        date = LocalDate.parse(dateInput, DATE_FORMAT_PUBLICATION_YEAR);
+        System.out.println("You entered: " + date);
 
         Book book = new Book(id, title, author, date);
         bookService.addBook(book);
@@ -301,7 +268,6 @@ public class Console {
             System.out.println("Enter the new Author");
             String newAuthor = scanner.next();
             this.bookService.updateBook(idToUpdate, newTitle, newAuthor);
-
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -325,13 +291,8 @@ public class Console {
             String releaseDateStr = bufferRead.readLine();
 
             // Parse the date string into a Date object
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            Date releaseDate = null;
-            try {
-                releaseDate = dateFormat.parse(releaseDateStr);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
+            LocalDate releaseDate = null;
+            releaseDate = LocalDate.parse(releaseDateStr, DATE_FORMAT_PUBLICATION_YEAR);
 
             Book book = new Book(id, title, author, releaseDate);
             book.setId(id);

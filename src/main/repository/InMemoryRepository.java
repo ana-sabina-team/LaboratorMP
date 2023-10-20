@@ -31,12 +31,6 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
 
     @Override
     public Iterable<T> findAll() {
-
-        // entities.entrySet().stream()
-        //Returneaza un stream de elemente, peste care se poate itera element cu element
-        //-returneaza un stream aplicand functia ->
-        // .map(element -> element.getValue()).collect(Collectors.toSet());
-
         return entities.values();
     }
 
@@ -46,19 +40,15 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
         if (entity == null) {
             throw new IllegalArgumentException("id must not be null");
         }
-
         validator.validate(entity);
         return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
-
     }
 
 
     @Override
     public Optional<T> delete(ID id) {
-
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
-
             //Optional <T> optionalT=delete(id)
             //optionalT.get() --------------->return the original cat object . getAge()
             //optionalT.isPresent () -------->check if it is a value in the optional
@@ -79,5 +69,4 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
         validator.validate(entity);
         return Optional.ofNullable(entities.computeIfPresent(entity.getId(), (k, v) -> entity));
     }
-
 }

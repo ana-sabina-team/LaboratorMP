@@ -10,22 +10,19 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
+
 public class BookFileRepository extends InMemoryRepository<Long, Book> {
-
     private String filename;
-
 
     public BookFileRepository(Validator<Book> validator, String filename) {
         super(validator);
-        this.filename = filename;
-
+        this.filename = System.getProperty("user.dir") + "/src/" + filename;
         loadData();
     }
 
@@ -53,16 +50,7 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
 
 
                 String releaseDateStr = items.get(3);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                Date releaseDate = null;
-
-
-                try {
-                    releaseDate = dateFormat.parse(releaseDateStr);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    // Handle date parsing error as needed
-                }
+                LocalDate releaseDate = LocalDate.parse(releaseDateStr, DATE_FORMAT_PUBLICATION_YEAR);
 
                 Book book = new Book(id, title, author, releaseDate);
                 book.setId(id);
@@ -80,28 +68,27 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
 
     @Override
     public Optional<Book> save(Book entity) throws ValidatorException {
+        saveToFile(entity);
         Optional<Book> optional = super.save(entity);
         if (optional.isPresent()) {
             return optional;
         }
-        saveToFile(entity);
         return Optional.empty();
     }
 
 
-    private void saveToFile(Book entity) {
+    public void saveToFile(Book entity) {
         Path path = Paths.get(filename);
 
         try (BufferedWriter bufferedWriter = Files.newBufferedWriter(path, StandardOpenOption.APPEND)) {
             bufferedWriter.write(
-                    entity.getId() + "," + entity.getTitle() + "," + entity.getAuthor() + "," + entity.getYearOfPublication());
+                    entity.getId() + "," + entity.getTitle() + "," + entity.getAuthor() + "," +
+                            DATE_FORMAT_PUBLICATION_YEAR.format(entity.getYearOfPublication()));
             bufferedWriter.newLine();
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 }
 
 

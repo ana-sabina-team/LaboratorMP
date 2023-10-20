@@ -3,11 +3,13 @@ package main.service;
 import main.domain.Book;
 import main.repository.Repository;
 
+import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
 public class BookService {
+    public static final DateTimeFormatter DATE_FORMAT_PUBLICATION_YEAR =   DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private Repository<Long, Book> bookRepository;
 
     public BookService(Repository<Long, Book> bookRepository) {
@@ -26,30 +28,27 @@ public class BookService {
         return books;
     }
 
-    public void deleteBook(long id){
+    public void deleteBook(long id) {
         bookRepository.delete(id);
         System.out.println("Book deleted successfully!");
     }
 
-    public void updateBook(Long id,String title,String author) {
-
+    public void updateBook(Long id, String title, String author) {
         Optional<Book> bookToUpdate = bookRepository.findOne(id);
-
         Book existingBook = null;
         if (bookToUpdate.isPresent()) {
-
             existingBook = bookToUpdate.get();
             existingBook.setAuthor(author);
             existingBook.setTitle(title);
-
+            bookRepository.update(existingBook);
+        } else {
+            System.out.println("Book with Id " + id + " not exists.");
         }
-        bookRepository.update(existingBook);
-
     }
 
     public Set<Book> filterBooksByTitle(String s) {
         Iterable<Book> books = bookRepository.findAll();
-        Set<Book> filteredBooks= new HashSet<>();
+        Set<Book> filteredBooks = new HashSet<>();
         for (Book book : books) {
             if (book.getTitle().contains(s)) {
                 filteredBooks.add(book);

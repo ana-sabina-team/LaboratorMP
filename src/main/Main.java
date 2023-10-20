@@ -15,11 +15,11 @@ import main.service.ClientService;
 public class Main {
     public static void main(String[] args) {
         Validator<Client> clientValidator = new ClientValidator();
-        Repository<Long, Client> clientRepository = new ClientFileRepository(clientValidator, "C:/Users/Sabina/IdeaProjects/LaboratorMP/src/ClientFile");
+        Repository<Long, Client> clientRepository = new ClientFileRepository(clientValidator, "ClientFile");
         ClientService clientService = new ClientService(clientRepository);
 
         Validator<Book> bookValidator = new BookValidator();
-        Repository<Long, Book> bookRepository = new BookFileRepository(bookValidator, "C:\\Users\\Alex\\OneDrive\\Documents\\GitHub\\LaboratorMP\\src\\BookFile");
+        Repository<Long, Book> bookRepository = new BookFileRepository(bookValidator, "BookFile");
         BookService bookService = new BookService(bookRepository);
 
         Console console = new Console(clientService, bookService);

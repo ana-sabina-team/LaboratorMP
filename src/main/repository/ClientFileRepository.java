@@ -14,13 +14,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-public class ClientFileRepository extends ClientRepositoryImpl<Long, Client> {
+public class ClientFileRepository extends InMemoryRepository<Long, Client> {
     private String fileName;
 
     public ClientFileRepository(Validator<Client> validator, String fileName) {
         super(validator);
-        this.fileName = fileName;
-
+        this.fileName = System.getProperty("user.dir") + "/src/" + fileName;
         loadData();
     }
 
