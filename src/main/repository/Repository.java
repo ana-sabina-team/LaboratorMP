@@ -5,7 +5,7 @@ import main.domain.validators.ValidatorException;
 
 import java.util.Optional;
 
-public interface Repository<ID, T extends BaseEntity<ID>>{
+public interface Repository<ID, T extends BaseEntity<ID>> {
     Optional<T> findOne(ID id);
 
     Iterable<T> findAll();

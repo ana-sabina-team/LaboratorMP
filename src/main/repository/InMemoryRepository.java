@@ -8,10 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-public class InMemoryRepository<ID,T extends BaseEntity<ID>> implements Repository<ID,T> {
+public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Repository<ID, T> {
 
-
-    public Map<ID,T> entities ;
+    public Map<ID, T> entities;
 
     private Validator<T> validator;
 
@@ -32,15 +31,8 @@ public class InMemoryRepository<ID,T extends BaseEntity<ID>> implements Reposito
 
     @Override
     public Iterable<T> findAll() {
-
-        // entities.entrySet().stream()
-        //Returneaza un stream de elemente, peste care se poate itera element cu element
-        //-returneaza un stream aplicand functia ->
-        // .map(element -> element.getValue()).collect(Collectors.toSet());
-
         return entities.values();
     }
-
 
 
     @Override
@@ -48,21 +40,15 @@ public class InMemoryRepository<ID,T extends BaseEntity<ID>> implements Reposito
         if (entity == null) {
             throw new IllegalArgumentException("id must not be null");
         }
-
         validator.validate(entity);
         return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
-
     }
 
 
-
     @Override
-
     public Optional<T> delete(ID id) {
-
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
-
             //Optional <T> optionalT=delete(id)
             //optionalT.get() --------------->return the original cat object . getAge()
             //optionalT.isPresent () -------->check if it is a value in the optional
@@ -75,7 +61,6 @@ public class InMemoryRepository<ID,T extends BaseEntity<ID>> implements Reposito
     }
 
 
-
     @Override
     public Optional<T> update(T entity) throws ValidatorException {
         if (entity == null) {
@@ -84,5 +69,4 @@ public class InMemoryRepository<ID,T extends BaseEntity<ID>> implements Reposito
         validator.validate(entity);
         return Optional.ofNullable(entities.computeIfPresent(entity.getId(), (k, v) -> entity));
     }
-
 }

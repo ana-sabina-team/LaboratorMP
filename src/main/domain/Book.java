@@ -1,16 +1,17 @@
 package main.domain;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+
+import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
 
 public class Book extends BaseEntity<Long> {
     private String title;
 
     private String author;
 
-    private Date yearOfPublication;
+    private LocalDate yearOfPublication;
 
-    public Book(Long id, String title, String author, Date yearOfPublication) {
+    public Book(Long id, String title, String author, LocalDate yearOfPublication) {
         super(id);
         this.title = title;
         this.author = author;
@@ -33,20 +34,21 @@ public class Book extends BaseEntity<Long> {
         this.author = author;
     }
 
-    public Date getYearOfPublication() {
+    public LocalDate getYearOfPublication() {
         return yearOfPublication;
     }
 
-    public void setYearOfPublication(Date yearOfPublication) {
+    public void setYearOfPublication(LocalDate yearOfPublication) {
         this.yearOfPublication = yearOfPublication;
     }
 
     @Override
     public String toString() {
         return "Book{" +
+                "id=" + getId().toString() + ", " +
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", yearOfPublication=" + new SimpleDateFormat("yyyy-MM-dd").format(yearOfPublication) +
+                ", yearOfPublication=" + DATE_FORMAT_PUBLICATION_YEAR.format(yearOfPublication) +
                 '}';
     }
 }
