@@ -7,16 +7,18 @@ import main.domain.validators.ValidatorException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public class ClientRepositoryImpl<ID, T extends BaseEntity<ID>> implements Repository<ID, T> {
-    private Map<ID, T> entities;
+public class InMemoryRepository<ID,T extends BaseEntity<ID>> implements Repository<ID,T> {
+
+
+    public Map<ID,T> entities ;
+
     private Validator<T> validator;
 
-    public ClientRepositoryImpl(Validator<T> validator) {
+
+    public InMemoryRepository(Validator<T> validator) {
+        entities = new HashMap<>();
         this.validator = validator;
-        this.entities = new HashMap<>();
     }
 
     @Override
@@ -25,39 +27,62 @@ public class ClientRepositoryImpl<ID, T extends BaseEntity<ID>> implements Repos
             throw new IllegalArgumentException("id must not be null");
         }
         return Optional.ofNullable(entities.get(id));
+
     }
 
     @Override
     public Iterable<T> findAll() {
-        Set<T> allEntities = entities.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
-        return allEntities;
+
+        // entities.entrySet().stream()
+        //Returneaza un stream de elemente, peste care se poate itera element cu element
+        //-returneaza un stream aplicand functia ->
+        // .map(element -> element.getValue()).collect(Collectors.toSet());
+
+        return entities.values();
     }
 
+
+
     @Override
-    public Optional<T> save(T entity) throws ValidatorException {
+    public Optional<T> save(T entity) {
         if (entity == null) {
             throw new IllegalArgumentException("id must not be null");
         }
+
         validator.validate(entity);
         return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
+
     }
 
+
+
     @Override
+
     public Optional<T> delete(ID id) {
+
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
+
+            //Optional <T> optionalT=delete(id)
+            //optionalT.get() --------------->return the original cat object . getAge()
+            //optionalT.isPresent () -------->check if it is a value in the optional
+            //optionalT.orElse() ------------>if it's empty it will return what it is in the brackets
+            //optionalT.orElseThrow() ------->if empty it will throw no such element exception
+
         }
-        return Optional.ofNullable(entities.remove(id));
+        return Optional.ofNullable //we have to put the result in the optional box firs
+                (entities.remove(id));//entities->the thing we want to create an optional of
     }
+
+
 
     @Override
     public Optional<T> update(T entity) throws ValidatorException {
         if (entity == null) {
-            throw new IllegalArgumentException("entity must not be null");
+            throw new IllegalArgumentException("entity must not be null ");
         }
         validator.validate(entity);
         return Optional.ofNullable(entities.computeIfPresent(entity.getId(), (k, v) -> entity));
     }
 
 }
-

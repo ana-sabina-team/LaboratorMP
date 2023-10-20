@@ -1,62 +1,66 @@
 package main.repository;
+import main.domain.BaseEntity;
 import main.domain.Book;
+import main.domain.validators.Validator;
+import main.domain.validators.ValidatorException;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
-public class BookRepositoryImpl implements BookRepository{
+public class BookRepositoryImpl <ID, T extends BaseEntity<ID>> implements Repository<ID, T>{
+    private Map<ID, T> entities;
+    private Validator<T> validator;
 
+    public BookRepositoryImpl() {
 
-    private Map<Long, Book> entities;
-    /*id=book*/
-
-
-    //constructor:The constructor initializes the entities field as a new instance of HashMap.
-    // This means the repository starts with an empty collection of students.
-    public BookRepositoryImpl(){
-        this.entities=new HashMap<>();
+        this.entities = new HashMap<>();
     }
 
-
-    @Override
-    public Book fiindPme(Long id) {
-        return null;
+    public BookRepositoryImpl(Validator<T> validator) {
+        this.validator = validator;
+        entities = new HashMap<>();
     }
 
     @Override
-    public Iterator<Book> findOne() {
-        return null;
-    }
-
-    @Override
-   public Iterable<Book> findAll(){
-        return entities.values();
-    }
-
-
-    @Override
-    public Book save(Book entity) {
-        Optional<Book> existing = Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
-        return existing.orElse(null);
-    }
-
-
-    @Override
-    public Book delete(Long id) {
-        entities.remove(id);
-        return null;
-    }
-
-
-    @Override
-    public Book update(Book entity) throws Exception {
-        if (entities.containsKey(entity.getId())) {
-            throw new Exception("there is no entity with the id  " + entity.getId());
+    public Optional<T> findOne(ID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
         }
-            entities.put(entity.getId(),entity);
-         return entity;
-        }
+        return Optional.ofNullable(entities.get(id));
+    }
 
+    @Override
+    public Iterable<T> findAll() {
+        Set<T> allEntities = entities.entrySet().stream().map(entry -> entry.getValue()).collect(Collectors.toSet());
+        return allEntities;
+    }
+
+    @Override
+    public Optional<T> save(T entity) throws ValidatorException {
+        if (entity == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+        validator.validate(entity);
+        return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
+    }
+
+    @Override
+    public Optional<T> delete(ID id) {
+        if (id == null) {
+            throw new IllegalArgumentException("id must not be null");
+        }
+        return Optional.ofNullable(entities.remove(id));
+    }
+
+    @Override
+    public Optional<T> update(T entity) throws ValidatorException {
+        if (entity == null) {
+            throw new IllegalArgumentException("entity must not be null");
+        }
+        validator.validate(entity);
+        return Optional.ofNullable(entities.computeIfPresent(entity.getId(), (k, v) -> entity));
+    }
     }
 
 
