@@ -19,7 +19,13 @@ public class ClientService {
     }
 
     public void addClient(Client client) throws ValidatorException {
+        Optional<Client> clientToVerify = repository.findOne(client.getId());
+
+        if (clientToVerify.isPresent()){
+            throw new ValidatorException("The ID already exists! Try again with another ID!");
+        } else {
         repository.save(client);
+        }
     }
 
     public Set<Client> getAllClients() {
@@ -28,7 +34,12 @@ public class ClientService {
     }
 
     public void deleteClient(long id){
-        repository.delete(id);
+        Optional<Client> clientToDelete = repository.findOne(id);
+        Client existingClient = null;
+        if (clientToDelete.isPresent()) {
+            existingClient = clientToDelete.get();
+        }
+        repository.delete(existingClient.getId());
         System.out.println("Client deleted successfully!");
     }
 

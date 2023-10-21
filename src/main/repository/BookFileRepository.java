@@ -1,6 +1,7 @@
 package main.repository;
 
 import main.domain.Book;
+import main.domain.Client;
 import main.domain.validators.Validator;
 import main.domain.validators.ValidatorException;
 
@@ -11,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -89,6 +91,33 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
             e.printStackTrace();
         }
     }
+    @Override
+    public Optional<Book> delete(Long id) {
+        Optional<Book> deletedBook = super.delete(id);
+        if (deletedBook.isPresent()) {
+            updateFile();
+        }
+        return deletedBook;
+    }
+
+    // Add this method to update the file after a client is deleted
+    private void updateFile() {
+        Path path = Paths.get(filename);
+        List<String> lines = new ArrayList<>();
+
+        entities.values().forEach(book -> {
+            String line = book.getId() + "," + book.getTitle() + "," + book.getAuthor() + ","
+                    + book.getYearOfPublication() ;
+            lines.add(line);
+        });
+
+        try {
+            Files.write(path, lines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
 
 

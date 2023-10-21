@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -21,6 +22,33 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
         super(validator);
         this.fileName = System.getProperty("user.dir") + "/src/" + fileName;
         loadData();
+    }
+
+    @Override
+    public Optional<Client> delete(Long id) {
+        Optional<Client> deletedClient = super.delete(id);
+        if (deletedClient.isPresent()) {
+            updateFile();
+        }
+        return deletedClient;
+    }
+
+    // Add this method to update the file after a client is deleted
+    private void updateFile() {
+        Path path = Paths.get(fileName);
+        List<String> lines = new ArrayList<>();
+
+        entities.values().forEach(client -> {
+            String line = client.getId() + "," + client.getCNP() + "," + client.getLastName() + ","
+                    + client.getFirstName() + "," + client.getAge();
+            lines.add(line);
+        });
+
+        try {
+            Files.write(path, lines);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadData() {
@@ -60,6 +88,7 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
 
     @Override
     public Optional<Client> save(Client entity) throws ValidatorException {
+        validator.validate(entity);
         Optional<Client> optional = super.save(entity);
         if (optional.isPresent()) {
             return optional;

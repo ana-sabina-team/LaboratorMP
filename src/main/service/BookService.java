@@ -1,6 +1,8 @@
 package main.service;
 
 import main.domain.Book;
+import main.domain.Client;
+import main.domain.validators.ValidatorException;
 import main.repository.Repository;
 
 import java.time.format.DateTimeFormatter;
@@ -16,10 +18,15 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public void addBook(Book book) {
-        bookRepository.save(book);
-    }
+    public void addBook(Book book) throws ValidatorException {
+        Optional<Book> bookToVerify = bookRepository.findOne(book.getId());
 
+        if (bookToVerify.isPresent()){
+            throw new ValidatorException("The ID already exists! Try again with another ID!");
+        } else {
+            bookRepository.save(book);
+        }
+    }
     public Set<Book> getAllBooks() {
         Set<Book> books = new HashSet<>();
         bookRepository

@@ -150,8 +150,15 @@ public class Console {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Searching for: ");
         String search = scanner.next();
-        Set<Client> students = clientService.filterClientsByLastName(search);
-        students.stream().forEach(System.out::println);
+        Set<Client> clients = clientService.filterClientsByLastName(search);
+
+        if (clients.isEmpty()) {
+            System.out.println("No Client found matching the search criteria.");
+        } else {
+            System.out.println("Filtered Clients:");
+
+            clients.forEach(client -> System.out.println(client));
+        }
     }
 
     public void updateClient() {
@@ -205,7 +212,7 @@ public class Console {
             Integer option = scanner.nextInt();
             switch (option) {
                 case 1:
-                    addBooK();
+                    addBookFile();
                     break;
                 case 2:
                     printBook();
