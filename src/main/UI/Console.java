@@ -14,10 +14,12 @@ import javax.xml.transform.TransformerException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.SortedSet;
 
 import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
 
@@ -32,7 +34,7 @@ public class Console {
         this.clientService = clientService;
         this.bookService = bookService;
         this.scanner = new Scanner(System.in);
-        this.bookXmlRepository=new BookXmlRepository();
+        this.bookXmlRepository = new BookXmlRepository();
     }
 
     private void printMenu() {
@@ -44,14 +46,16 @@ public class Console {
     private void printMenuBooks() {
         System.out.println(
                 "1 - Add Book\n" +
-                "2 - Print all Books from BookFile\n" +
-                "3-  Delete a book by ID\n" +
-                "4-  Update a book by ID\n" +
-                "5-  Filter  a book by title name \n" +
-                "6-  Print all books from XML file\n" +
+                        "2 - Print all Books from BookFile\n" +
+                        "3-  Delete a book by ID from BookFile\n" +
+                        "4-  Update a book by ID from BookFile\n" +
+                        "5-  Filter  a book by title name from BookFile \n" +
+                        "6-  Print all books from XML file\n" +
                         "7-  Delete  a books by title in  XML file\n" +
+                        "8-  Update  a books by title in  XML file\n" +
 
-                "0 - Exit");
+
+                        "0 - Exit");
     }
 
     public void runMenu() throws ParserConfigurationException, IOException, TransformerException, SAXException {
@@ -243,6 +247,13 @@ public class Console {
                 case 7:
                     deleteBookFromXMLByTitle();
                     break;
+                case 8:
+                    updateTitleFromXML();
+                    break;
+                case 9:
+                    updateTitleFromXML();
+                    break;
+
                 case 0:
                     return;
                 default:
@@ -354,9 +365,9 @@ public class Console {
         }
     }
 
-    private void showBooksFromXML(){
-        try{
-           List<Book> books= BookXmlRepository.loadData();
+    private void showBooksFromXML() {
+        try {
+            List<Book> books = BookXmlRepository.loadData();
             books.forEach(System.out::println);
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
@@ -371,11 +382,26 @@ public class Console {
     private void deleteBookFromXMLByTitle() throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the title you want to delete ");
-        String bookToDelete=scanner.next();
+        String bookToDelete = scanner.next();
 
-        List<Book> books=BookXmlRepository.deleteFromXmlByBookTitle(bookToDelete);
+        List<Book> books = BookXmlRepository.deleteFromXmlByBookTitle(bookToDelete);
 
 
     }
+
+
+    private List<Book> updateTitleFromXML() throws ParserConfigurationException, IOException, TransformerException, SAXException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("enter the title to update: ");
+        String titleToUpdate = sc.next();
+        System.out.println("enter the new title : ");
+        String newTitle = sc.next();
+        List<Book> books = BookXmlRepository.updateTitleInXml(titleToUpdate, newTitle);
+        return books;
+
+    }
+
+
+
 
 }

@@ -45,10 +45,8 @@ public class Main {
 //
 //        BookXmlRepository.saveToXml(book1);
 //        BookXmlRepository.saveToXml(book2);
-        BookXmlRepository.saveToXml(book3);
-
-
-//        List<Book> books=loadData();
+//        BookXmlRepository.saveToXml(book3);
+///        List<Book> books=loadData();
 //        System.out.println(books);
 
         console.runMenu();

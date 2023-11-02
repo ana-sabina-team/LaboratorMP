@@ -24,7 +24,7 @@ import java.util.List;
 
 public class BookXmlRepository {
 
-    private static Document document; //se initialize o singura data
+    private static Document document;
 
 
     public static void saveToXml(Book book) throws ParserConfigurationException, IOException, SAXException, TransformerException {
@@ -61,7 +61,7 @@ public class BookXmlRepository {
     public static List<Book> loadData() throws ParserConfigurationException, IOException, SAXException {
 
         ArrayList<Book> books = new ArrayList<>();
-        Element bookStoreElement =getBookStoreElement();
+        Element bookStoreElement = getBookStoreElement();
 
         NodeList nodeList = bookStoreElement.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
@@ -86,7 +86,6 @@ public class BookXmlRepository {
             book.setYearOfPublication(LocalDate.parse(yearOfPublication));
         }
         return book;
-
     }
 
 
@@ -115,10 +114,25 @@ public class BookXmlRepository {
     }
 
 
-    public static void updateTitleInXml(String titleToUpdate, String newTitle) throws ParserConfigurationException, IOException, SAXException {
+    public static List<Book> updateTitleInXml(String titleToUpdate, String newTitle) throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Document document = getDocument();
         Element bookStoreElement = document.getDocumentElement();
 
+        NodeList bookNodes = bookStoreElement.getElementsByTagName("book");
+
+        for (int i = 0; i < bookNodes.getLength(); i++) {
+            Element bookElement = (Element) bookNodes.item(i);
+            String title = getTextContentFromTag("title", bookElement);
+
+            if (titleToUpdate.equals(title)) {
+                // Update the title with the new title
+                Element titleElement = (Element) bookElement.getElementsByTagName("title").item(0);
+                titleElement.setTextContent(newTitle);
+            }
+        }
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.transform(new DOMSource(document), new StreamResult(new FileOutputStream("data/book.xml")));
+        return null;
     }
 
 
@@ -140,4 +154,6 @@ public class BookXmlRepository {
         //create a tree like object
         return document;
     }
+
+
 }
