@@ -24,7 +24,8 @@ import java.util.List;
 
 public class BookXmlRepository {
 
-    ;
+    private static Document document; //se initialize o singura data
+
 
     public static void saveToXml(Book book) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 
@@ -108,16 +109,18 @@ public class BookXmlRepository {
 
 
     public static List<Book> deleteFromXmlByBookTitle(String titleToDelete) throws ParserConfigurationException, IOException, SAXException, TransformerException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse("data/book.xml");
-        Element bookStoreElement = document.getDocumentElement();
+
+        Element bookStoreElement = getBookStoreElement();
+        Document document = getDocument();
+
+
         NodeList bookNodes = bookStoreElement.getElementsByTagName("book");
+
 
         for (int i = 0; i < bookNodes.getLength(); i++) {
             Element bookElement = (Element) bookNodes.item(i);
             String title = getTextContentFromTag("title", bookElement);
-            if (title.equals(titleToDelete)) {
+            if (titleToDelete.equals(title)) {
                 bookStoreElement.removeChild(bookElement);
             }
         }
@@ -129,6 +132,27 @@ public class BookXmlRepository {
     }
 
 
+    public static void updateTitleinXML(String titleToUpdate, String newTitle) {
+
+    }
 
 
+    public static Element getBookStoreElement() throws ParserConfigurationException, IOException, SAXException {
+
+        Document document = getDocument();
+        Element bookStoreElement = document.getDocumentElement();
+
+        return bookStoreElement;
+    }
+
+    public static Document getDocument() throws ParserConfigurationException, IOException, SAXException {
+        if (document != null) {
+            return document;
+        }
+        //punem ce returneaza
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        document = documentBuilder.parse("data/book.xml");
+        return document;
+    }
 }

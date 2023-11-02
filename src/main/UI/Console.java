@@ -241,7 +241,7 @@ public class Console {
                     showBooksFromXML();
                     break;
                 case 7:
-                    deleteBookFromXML();
+                    deleteBookFromXMLByTitle();
                     break;
                 case 0:
                     return;
@@ -368,7 +368,7 @@ public class Console {
     }
 
 
-    private void deleteBookFromXML() throws ParserConfigurationException, IOException, SAXException, TransformerException {
+    private void deleteBookFromXMLByTitle() throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the title you want to delete ");
         String bookToDelete=scanner.next();
