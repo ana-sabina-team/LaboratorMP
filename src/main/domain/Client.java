@@ -1,5 +1,6 @@
 package main.domain;
 
+
 public class Client extends BaseEntity<Long> {
     private String CNP;
     private String lastName;
