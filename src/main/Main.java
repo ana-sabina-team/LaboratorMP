@@ -32,7 +32,10 @@ public class Main {
         Validator<Book> bookValidator = new BookValidator();
         Repository<Long, Book> bookRepository = new BookFileRepository(bookValidator, "BookFile");
         BookService bookService = new BookService(bookRepository);
-        Console console = new Console(clientService, bookService);
+
+
+        BookXmlRepository bookXmlRepository=new BookXmlRepository();
+        Console console = new Console(clientService, bookService,bookXmlRepository);
 
 
 

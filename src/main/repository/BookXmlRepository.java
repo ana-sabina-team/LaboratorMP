@@ -11,7 +11,6 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -62,6 +61,7 @@ public class BookXmlRepository {
 
     }
 
+
     public static List<Book> loadData() throws ParserConfigurationException, IOException, SAXException {
         ArrayList<Book> books = new ArrayList<>();
 
@@ -87,11 +87,11 @@ public class BookXmlRepository {
 
     private static Book getBookFromBookNode(Element bookElement) {
         Book book = new Book();
-        String title = getTextContentFromTag("title",bookElement);
+        String title = getTextContentFromTag("title", bookElement);
         book.setTitle(title);
         String author = getTextContentFromTag("author", bookElement);
         book.setAuthor(author);
-        String yearOfPublication=getTextContentFromTag("yearOfPublication",bookElement);
+        String yearOfPublication = getTextContentFromTag("yearOfPublication", bookElement);
         if (yearOfPublication != null) {
             book.setYearOfPublication(LocalDate.parse(yearOfPublication));
         }
@@ -100,10 +100,32 @@ public class BookXmlRepository {
     }
 
 
-    private static String getTextContentFromTag(String tagname,Element bookElement){
-        NodeList taglist=bookElement.getElementsByTagName(tagname);
-        Node titleNode=taglist.item(0);
-        return titleNode != null ?  titleNode.getTextContent() : null;
+    private static String getTextContentFromTag(String tagname, Element bookElement) {
+        NodeList taglist = bookElement.getElementsByTagName(tagname);
+        Node titleNode = taglist.item(0);
+        return titleNode != null ? titleNode.getTextContent() : null;
+    }
+
+
+    public static List<Book> deleteFromXmlByBookTitle(String titleToDelete) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document document = documentBuilder.parse("data/book.xml");
+        Element bookStoreElement = document.getDocumentElement();
+        NodeList bookNodes = bookStoreElement.getElementsByTagName("book");
+
+        for (int i = 0; i < bookNodes.getLength(); i++) {
+            Element bookElement = (Element) bookNodes.item(i);
+            String title = getTextContentFromTag("title", bookElement);
+            if (title.equals(titleToDelete)) {
+                bookStoreElement.removeChild(bookElement);
+            }
+        }
+
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.transform(new DOMSource(document), new StreamResult(new FileOutputStream("data/book.xml")));
+
+        return null;
     }
 
 
