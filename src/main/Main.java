@@ -38,19 +38,19 @@ public class Main {
         Console console = new Console(clientService, bookService,bookXmlRepository);
 
 
-
 //        Book book1=new Book(1L,"title1","author1", LocalDate.of(2020,9,9));
 //        Book book2=new Book(6L,"title2","author2", LocalDate.of(2021,9,9));
-//        Book book3=new Book(9L,"aaaa","aaaaa", LocalDate.of(1990,9,9));
+        Book book3=new Book(9L,"sabina","author", LocalDate.of(2020,9,9));
 //
 //
 //        BookXmlRepository.saveToXml(book1);
 //        BookXmlRepository.saveToXml(book2);
-//        BookXmlRepository.saveToXml(book3);
+        BookXmlRepository.saveToXml(book3);
 
 
 //        List<Book> books=loadData();
 //        System.out.println(books);
+
         console.runMenu();
         System.out.println("bye");
     }

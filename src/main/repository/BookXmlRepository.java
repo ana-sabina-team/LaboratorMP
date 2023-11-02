@@ -29,12 +29,7 @@ public class BookXmlRepository {
 
     public static void saveToXml(Book book) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-
-        Document document = documentBuilder.parse("data/book.xml");
-
+        Document document = getDocument();
         Element bookStoreElement = document.getDocumentElement();
 
         //CREATE A NEW BOOK element
@@ -64,15 +59,9 @@ public class BookXmlRepository {
 
 
     public static List<Book> loadData() throws ParserConfigurationException, IOException, SAXException {
+
         ArrayList<Book> books = new ArrayList<>();
-
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-
-        Document document = documentBuilder.parse("data/book.xml");
-
-        Element bookStoreElement = document.getDocumentElement();
+        Element bookStoreElement =getBookStoreElement();
 
         NodeList nodeList = bookStoreElement.getChildNodes();
         for (int i = 0; i < nodeList.getLength(); i++) {
@@ -112,11 +101,7 @@ public class BookXmlRepository {
 
         Element bookStoreElement = getBookStoreElement();
         Document document = getDocument();
-
-
         NodeList bookNodes = bookStoreElement.getElementsByTagName("book");
-
-
         for (int i = 0; i < bookNodes.getLength(); i++) {
             Element bookElement = (Element) bookNodes.item(i);
             String title = getTextContentFromTag("title", bookElement);
@@ -124,15 +109,15 @@ public class BookXmlRepository {
                 bookStoreElement.removeChild(bookElement);
             }
         }
-
         Transformer transformer = TransformerFactory.newInstance().newTransformer();
         transformer.transform(new DOMSource(document), new StreamResult(new FileOutputStream("data/book.xml")));
-
         return null;
     }
 
 
-    public static void updateTitleinXML(String titleToUpdate, String newTitle) {
+    public static void updateTitleInXml(String titleToUpdate, String newTitle) throws ParserConfigurationException, IOException, SAXException {
+        Document document = getDocument();
+        Element bookStoreElement = document.getDocumentElement();
 
     }
 
@@ -140,19 +125,19 @@ public class BookXmlRepository {
     public static Element getBookStoreElement() throws ParserConfigurationException, IOException, SAXException {
 
         Document document = getDocument();
-        Element bookStoreElement = document.getDocumentElement();
-
-        return bookStoreElement;
+        return document.getDocumentElement();
     }
 
     public static Document getDocument() throws ParserConfigurationException, IOException, SAXException {
         if (document != null) {
             return document;
         }
-        //punem ce returneaza
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        //newInstance of DBF
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        //create a new Document object
         document = documentBuilder.parse("data/book.xml");
+        //create a tree like object
         return document;
     }
 }

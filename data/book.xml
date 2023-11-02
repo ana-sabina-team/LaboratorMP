@@ -9,25 +9,9 @@
         <author>Erik T. Ray</author>
         <yearOfPublication>2003-09-09</yearOfPublication>
     </book>
-
-
     <book>
         <title>aaaa</title>
         <author>aaaaa</author>
         <yearOfPublication>1990-09-09</yearOfPublication>
     </book>
-
-
-    <book>
-        <title>aaaa</title>
-        <author>aaaaa</author>
-        <yearOfPublication>1990-09-09</yearOfPublication>
-    </book>
-    
-
-    <book>
-        <title>aaaa</title>
-        <author>aaaaa</author>
-        <yearOfPublication>1990-09-09</yearOfPublication>
-    </book>
-</bookstore>
+<book><title>sabina</title><author>author</author><yearOfPublication>2020-09-09</yearOfPublication></book></bookstore>
