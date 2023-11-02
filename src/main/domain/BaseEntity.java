@@ -8,6 +8,10 @@ public class BaseEntity<ID> {
         this.id = id;
     }
 
+    public BaseEntity() {
+
+    }
+
     public ID getId() {
         return id;
     }

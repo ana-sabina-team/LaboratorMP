@@ -11,12 +11,19 @@ public class Book extends BaseEntity<Long> {
 
     private LocalDate yearOfPublication;
 
+
+    public Book(){
+        super();
+
+    }
     public Book(Long id, String title, String author, LocalDate yearOfPublication) {
         super(id);
         this.title = title;
         this.author = author;
         this.yearOfPublication = yearOfPublication;
     }
+
+
 
     public String getTitle() {
         return title;
@@ -45,7 +52,7 @@ public class Book extends BaseEntity<Long> {
     @Override
     public String toString() {
         return "Book{" +
-                "id=" + getId().toString() + ", " +
+
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", yearOfPublication=" + DATE_FORMAT_PUBLICATION_YEAR.format(yearOfPublication) +
