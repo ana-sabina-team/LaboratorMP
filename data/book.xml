@@ -9,10 +9,6 @@
         <author>Erik T. Ray</author>
         <yearOfPublication>2003-09-09</yearOfPublication>
     </book>
-    <book>
-        <title>banana</title>
-        <author>aaaaa</author>
-        <yearOfPublication>1990-09-09</yearOfPublication>
-    </book>
+    
     
 <book><title>alex</title><author>author</author><yearOfPublication>2020-09-09</yearOfPublication></book></bookstore>

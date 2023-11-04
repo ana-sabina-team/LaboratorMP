@@ -69,8 +69,8 @@ public class Console {
     private void runSubMenuAddBooks() {
         while (true) {
             System.out.println("1. Manual add");
-            System.out.println("2. To file add");
-            System.out.println("3. To XML file add");
+            System.out.println("2. Add book to XML");
+            System.out.println("3. Show books from XML");
             System.out.println("0. Back");
             Scanner scanner = new Scanner(System.in);
             String option = scanner.next();
@@ -80,10 +80,10 @@ public class Console {
                     this.addBook();
                     break;
                 case "2":
-                    this.addBookFile();
+                    this.addBookXML();
                     break;
                 case "3":
-                    this.addBookXML();
+                    this.showBooksFromXML();
                     break;
                 case "0":
                     return;
@@ -568,8 +568,8 @@ public class Console {
         if (book == null || book.getId() < 0) {
         }
         try {
-            bookService.addBook(book);
-        } catch (ValidatorException e) {
+            BookXmlRepository.saveToXml(book);
+        } catch (ValidatorException | ParserConfigurationException | IOException | SAXException | TransformerException e) {
             e.printStackTrace();
         }
     }
@@ -603,6 +603,8 @@ public class Console {
     }
 
 
+
+
     private void deleteBookFromXMLByTitle() throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the title you want to delete ");
@@ -624,6 +626,8 @@ public class Console {
         return books;
 
     }
+
+
 
 
 

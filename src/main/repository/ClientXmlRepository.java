@@ -145,7 +145,7 @@ public class ClientXmlRepository {
         if (document != null) {
             return document;
         }
-        //punem ce returneaza
+
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         document = documentBuilder.parse("data/clientFile.xml");
