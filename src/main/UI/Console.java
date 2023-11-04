@@ -5,6 +5,7 @@ import main.domain.Book;
 import main.domain.Client;
 import main.domain.validators.ValidatorException;
 import main.repository.ClientXmlRepository;
+import main.repository.BookXmlRepository;
 import main.service.BookService;
 import main.service.ClientService;
 import org.xml.sax.SAXException;
@@ -14,25 +15,31 @@ import javax.xml.transform.TransformerException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.SortedSet;
 
 import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
 
-public class Console {
+public class Console (){
     private ClientService clientService;
     private BookService bookService;
     private Scanner scanner;
     private ClientXmlRepository clientXmlRepository;
+    private BookXmlRepository bookXmlRepository;
 
-    public Console(ClientService clientService, BookService bookService, ClientXmlRepository clientXmlRepository) throws ParserConfigurationException, IOException, SAXException {
+
+    public Console(ClientService clientService, BookService bookService, BookXmlRepository bookXmlRepository) {
         this.clientService = clientService;
         this.bookService = bookService;
         this.scanner = new Scanner(System.in);
+        this.bookXmlRepository = new BookXmlRepository();
         this.clientXmlRepository=new ClientXmlRepository();
     }
+
     private void printMenu() {
         System.out.println("1 - Client\n" +
                 "2 - Book\n" +
@@ -66,8 +73,6 @@ public class Console {
             System.out.println("1. Manual add");
             System.out.println("2. To file add");
             System.out.println("3. To XML file add");
-            System.out.println("4. Print all");
-            System.out.println("5. Filter title");
             System.out.println("0. Back");
             Scanner scanner = new Scanner(System.in);
             String option = scanner.next();
@@ -80,13 +85,7 @@ public class Console {
                     this.addBookFile();
                     break;
                 case "3":
-//                    this.addBookXML();
-                    break;
-                case "4":
-//                    this.printBook();
-                    break;
-                case "5":
-                   this.filterBooks();
+                    this.addBookXML();
                     break;
                 case "0":
                     return;
@@ -109,7 +108,7 @@ public class Console {
                     this.deleteBook();
                     break;
                 case "2":
-//                    this.deleteBookXML();
+                    this.deleteBookFromXMLByTitle();
                     break;
                 case "0":
                     return;
@@ -132,7 +131,7 @@ public class Console {
                     this.updateBook();
                     break;
                 case "2":
-//                    this.updateTitleFromXML();
+                    this.updateTitleFromXML();
                     break;
                 case "0":
                     return;
@@ -205,7 +204,7 @@ public class Console {
                     this.printBook();
                     break;
                 case "2":
-//                    this.showBooksFromXML();
+                    this.showBooksFromXML();
                     break;
                 case "0":
                     return;
@@ -443,7 +442,8 @@ public class Console {
     }
 
     //Books
-    public void runSubMenuBook() {
+
+    public void runSubMenuBook() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
             System.out.println("1. Add menu");
             System.out.println("2. Delete menu");
@@ -565,16 +565,16 @@ public class Console {
         }
     }
 
-//    private void addBookXML(){
-//        Book book = readBook();
-//        if (book == null || book.getId() < 0) {
-//        }
-//        try {
-//            bookService.addBook(book);
-//        } catch (ValidatorException e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void addBookXML(){
+        Book book = readBook();
+        if (book == null || book.getId() < 0) {
+        }
+        try {
+            bookService.addBook(book);
+        } catch (ValidatorException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void filterBooks() {
         Scanner scanner = new Scanner(System.in);
@@ -590,5 +590,44 @@ public class Console {
             books.forEach(book -> System.out.println(book));
         }
     }
+
+    private void showBooksFromXML() {
+        try {
+            List<Book> books = BookXmlRepository.loadData();
+            books.forEach(System.out::println);
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private void deleteBookFromXMLByTitle() throws ParserConfigurationException, IOException, SAXException, TransformerException {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Please enter the title you want to delete ");
+        String bookToDelete = scanner.next();
+
+        List<Book> books = BookXmlRepository.deleteFromXmlByBookTitle(bookToDelete);
+
+
+    }
+
+
+    private List<Book> updateTitleFromXML() throws ParserConfigurationException, IOException, TransformerException, SAXException {
+        Scanner sc = new Scanner(System.in);
+        System.out.println("enter the title to update: ");
+        String titleToUpdate = sc.next();
+        System.out.println("enter the new title : ");
+        String newTitle = sc.next();
+        List<Book> books = BookXmlRepository.updateTitleInXml(titleToUpdate, newTitle);
+        return books;
+
+    }
+
+
+
 
 }

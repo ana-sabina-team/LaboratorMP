@@ -72,10 +72,7 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
     public Optional<Book> save(Book entity) throws ValidatorException {
         saveToFile(entity);
         Optional<Book> optional = super.save(entity);
-        if (optional.isPresent()) {
-            return optional;
-        }
-        return Optional.empty();
+        return optional;
     }
 
 
@@ -91,6 +88,7 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
             e.printStackTrace();
         }
     }
+
     @Override
     public Optional<Book> delete(Long id) {
         Optional<Book> deletedBook = super.delete(id);
@@ -107,7 +105,7 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
 
         entities.values().forEach(book -> {
             String line = book.getId() + "," + book.getTitle() + "," + book.getAuthor() + ","
-                    + book.getYearOfPublication() ;
+                    + book.getYearOfPublication();
             lines.add(line);
         });
 
