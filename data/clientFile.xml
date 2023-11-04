@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><clientFile>
+    <client>
+        <CNP>1111122233344</CNP>
+        <lastName>Fieraru</lastName>
+        <firstName>Lavinia</firstName>
+        <age>35</age>
+    </client>
+    <client>
+        <CNP>5647922233344</CNP>
+        <lastName>Florea</lastName>
+        <firstName>Catalin</firstName>
+        <age>18</age>
+    </client>
+    <client>
+        <CNP>1155122233344</CNP>
+        <lastName>Moraru</lastName>
+        <firstName>Tudor</firstName>
+        <age>55</age>
+    </client>
+
+</clientFile>

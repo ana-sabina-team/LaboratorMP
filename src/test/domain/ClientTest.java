@@ -13,8 +13,8 @@ class ClientTest {
     private static final Long NEW_ID =2L;
     private static final String CNP = "sn01";
     private static final String NEW_CNP = "sn02";
-    private static final String LAST_NAME = "studentLastName";
-    private static final String FIRST_NAME = "studentFirstName";
+    private static final String LAST_NAME = "clientLastName";
+    private static final String FIRST_NAME = "clientFirstName";
     private static final int AGE = 23;
 
     private Client client;
