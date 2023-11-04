@@ -2,13 +2,16 @@ package main.domain;
 
 
 public class Client extends BaseEntity<Long> {
+    private static Long id;
     private String CNP;
     private String lastName;
     private String firstName;
     private int age;
 
-
-    public Client(Long id, String CNP, String lastName, String firstName, int age) {
+    public Client() {
+        super(id);
+    }
+    public Client(Long id,String CNP, String lastName, String firstName, int age) {
         super(id);
         this.CNP = CNP;
         this.lastName = lastName;
