@@ -32,8 +32,8 @@ public class Main {
         BookService bookService = new BookService(bookRepository);
 
 
-        BookXmlRepository bookXmlRepository=new BookXmlRepository();
-        ClientXmlRepository clientXmlRepository=new ClientXmlRepository();
+        BookXmlRepository bookXmlRepository=new BookXmlRepository(bookValidator);
+        ClientXmlRepository clientXmlRepository=new ClientXmlRepository(clientValidator);
         Console console = new Console(clientService, bookService, clientXmlRepository, bookXmlRepository);
 
         console.runMenu();

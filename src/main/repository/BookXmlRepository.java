@@ -1,6 +1,8 @@
 package main.repository;
 
 import main.domain.Book;
+import main.domain.Client;
+import main.domain.validators.Validator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,9 +24,13 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookXmlRepository {
+public class BookXmlRepository  extends InMemoryRepository<Long, Book>{
 
     private static Document document;
+
+    public BookXmlRepository(Validator<Book> validator) {
+        super(validator);
+    }
 
 
     public static void saveToXml(Book book) throws ParserConfigurationException, IOException, SAXException, TransformerException {

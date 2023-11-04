@@ -1,6 +1,7 @@
 package main.repository;
 
 import main.domain.Client;
+import main.domain.validators.Validator;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -20,8 +21,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ClientXmlRepository {
+public class ClientXmlRepository extends InMemoryRepository<Long, Client> {
     private static Document document; //se initialize o singura data
+
+    public ClientXmlRepository(Validator<Client> validator) {
+        super(validator);
+    }
 
     public static void saveToXml(Client client) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 

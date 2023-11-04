@@ -23,6 +23,8 @@ import java.util.Set;
 import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
 
 public class Console {
+    private Validator<Book> bookValidator;
+    private Validator<Client> clientValidator;
     private ClientService clientService;
     private BookService bookService;
     private Scanner scanner;
@@ -34,8 +36,8 @@ public class Console {
         this.clientService = clientService;
         this.bookService = bookService;
         this.scanner = new Scanner(System.in);
-        this.bookXmlRepository = new BookXmlRepository();
-        this.clientXmlRepository=new ClientXmlRepository();
+        this.bookXmlRepository = new BookXmlRepository(bookValidator);
+        this.clientXmlRepository=new ClientXmlRepository(clientValidator);
     }
 
     private void printMenu() {
@@ -66,11 +68,11 @@ public class Console {
         }
     }
 
-    private void runSubMenuAddBooks() {
+    private void runSubMenuAddBooks() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
             System.out.println("1. Manual add");
-            System.out.println("2. Add book to XML");
-            System.out.println("3. Show books from XML");
+            System.out.println("2. To file add");
+            System.out.println("3. To XML file add");
             System.out.println("0. Back");
             Scanner scanner = new Scanner(System.in);
             String option = scanner.next();
@@ -80,10 +82,10 @@ public class Console {
                     this.addBook();
                     break;
                 case "2":
-                    this.addBookXML();
+                    this.addBookFile();
                     break;
                 case "3":
-                    this.showBooksFromXML();
+                    this.addBookXML();
                     break;
                 case "0":
                     return;
@@ -569,7 +571,7 @@ public class Console {
         }
         try {
             BookXmlRepository.saveToXml(book);
-        } catch (ValidatorException | ParserConfigurationException | IOException | SAXException | TransformerException e) {
+        } catch (ValidatorException e) {
             e.printStackTrace();
         }
     }
