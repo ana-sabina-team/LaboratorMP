@@ -1,4 +1,3 @@
-package main.repository;public class ClientXmlRepository {
 package main.repository;
 
 import main.domain.Client;
