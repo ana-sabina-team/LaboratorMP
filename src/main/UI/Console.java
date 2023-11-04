@@ -3,6 +3,7 @@ package main.UI;
 
 import main.domain.Book;
 import main.domain.Client;
+import main.domain.validators.Validator;
 import main.domain.validators.ValidatorException;
 import main.repository.ClientXmlRepository;
 import main.repository.BookXmlRepository;
@@ -23,6 +24,8 @@ import java.util.Set;
 import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
 
 public class Console {
+    private Validator<Book> bookValidator;
+    private Validator<Client> clientValidator;
     private ClientService clientService;
     private BookService bookService;
     private Scanner scanner;
@@ -34,8 +37,8 @@ public class Console {
         this.clientService = clientService;
         this.bookService = bookService;
         this.scanner = new Scanner(System.in);
-        this.bookXmlRepository = new BookXmlRepository();
-        this.clientXmlRepository=new ClientXmlRepository();
+        this.bookXmlRepository = new BookXmlRepository(bookValidator);
+        this.clientXmlRepository=new ClientXmlRepository(clientValidator);
     }
 
     private void printMenu() {
@@ -66,7 +69,7 @@ public class Console {
         }
     }
 
-    private void runSubMenuAddBooks() {
+    private void runSubMenuAddBooks() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
             System.out.println("1. Manual add");
             System.out.println("2. To file add");
@@ -563,12 +566,12 @@ public class Console {
         }
     }
 
-    private void addBookXML(){
+    private void addBookXML() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         Book book = readBook();
         if (book == null || book.getId() < 0) {
         }
         try {
-            bookService.addBook(book);
+            BookXmlRepository.saveToXml(book);
         } catch (ValidatorException e) {
             e.printStackTrace();
         }

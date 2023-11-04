@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><bookstore>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<bookstore>
     <book category="children">
         <title>Harry Potter</title>
         <author>J K. Rowling</author>
@@ -14,5 +15,15 @@
         <author>aaaaa</author>
         <yearOfPublication>1990-09-09</yearOfPublication>
     </book>
-    
-<book><title>alex</title><author>author</author><yearOfPublication>2020-09-09</yearOfPublication></book></bookstore>
+
+    <book>
+        <title>alex</title>
+        <author>author</author>
+        <yearOfPublication>2020-09-09</yearOfPublication>
+    </book>
+    <book>
+        <title>T1</title>
+        <author>A1</author>
+        <yearOfPublication>2020-03-08</yearOfPublication>
+    </book>
+</bookstore>
