@@ -15,16 +15,14 @@ import javax.xml.transform.TransformerException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLOutput;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.SortedSet;
 
 import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
 
-public class Console (){
+public class Console {
     private ClientService clientService;
     private BookService bookService;
     private Scanner scanner;
@@ -32,7 +30,7 @@ public class Console (){
     private BookXmlRepository bookXmlRepository;
 
 
-    public Console(ClientService clientService, BookService bookService, BookXmlRepository bookXmlRepository) {
+    public Console(ClientService clientService, BookService bookService, ClientXmlRepository clientXmlRepository, BookXmlRepository bookXmlRepository) {
         this.clientService = clientService;
         this.bookService = bookService;
         this.scanner = new Scanner(System.in);
@@ -95,7 +93,7 @@ public class Console (){
             }
         }
     }
-    private void runSubMenuDeleteBooks() {
+    private void runSubMenuDeleteBooks() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
             System.out.println("1. Delete file");
             System.out.println("2. Delete XML");
@@ -118,7 +116,7 @@ public class Console (){
             }
         }
     }
-    private void runSubMenuUpdateBooks() {
+    private void runSubMenuUpdateBooks() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
             System.out.println("1. Update file");
             System.out.println("2. Update XML");
@@ -194,7 +192,7 @@ public class Console (){
     private void runSubMenuPrintBooks() {
         while (true) {
             System.out.println("1.  Print from file");
-            System.out.println("3. Print from XML");
+            System.out.println("2. Print from XML");
             System.out.println("0. Back");
             Scanner scanner = new Scanner(System.in);
             String option = scanner.next();
