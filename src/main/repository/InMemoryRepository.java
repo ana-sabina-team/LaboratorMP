@@ -3,7 +3,11 @@ package main.repository;
 import main.domain.BaseEntity;
 import main.domain.validators.Validator;
 import main.domain.validators.ValidatorException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -21,7 +25,7 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
     }
 
     @Override
-    public Optional<T> findOne(ID id) {
+    public Optional<T> findOne(ID id) throws ParserConfigurationException, IOException, SAXException {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -46,7 +50,7 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
 
 
     @Override
-    public Optional<T> delete(ID id) {
+    public Optional<T> delete(ID id) throws ParserConfigurationException, IOException, TransformerException, SAXException {
         if (id == null) {
             throw new IllegalArgumentException("id must not be null");
         }
@@ -54,7 +58,7 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
     }
 
     @Override
-    public Optional<T> update(T entity) throws ValidatorException {
+    public Optional<T> update(T entity) throws ValidatorException, ParserConfigurationException, IOException, TransformerException, SAXException {
         if (entity == null) {
             throw new IllegalArgumentException("entity must not be null ");
         }

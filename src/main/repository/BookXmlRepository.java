@@ -1,7 +1,6 @@
 package main.repository;
 
 import main.domain.Book;
-import main.domain.Client;
 import main.domain.validators.Validator;
 import main.domain.validators.ValidatorException;
 import org.w3c.dom.Document;

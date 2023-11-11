@@ -1,10 +1,12 @@
 package main.repository;
 
 import main.domain.Book;
-import main.domain.Client;
 import main.domain.validators.Validator;
 import main.domain.validators.ValidatorException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -90,7 +92,7 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
     }
 
     @Override
-    public Optional<Book> delete(Long id) {
+    public Optional<Book> delete(Long id) throws ParserConfigurationException, IOException, TransformerException, SAXException {
         Optional<Book> deletedBook = super.delete(id);
         if (deletedBook.isPresent()) {
             updateFile();

@@ -1,10 +1,14 @@
 package main.service;
 
 import main.domain.Book;
-import main.domain.Client;
 import main.domain.validators.ValidatorException;
 import main.repository.Repository;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Optional;
@@ -18,16 +22,25 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public void addBook(Book book) throws ValidatorException {
-        Optional<Book> bookToVerify = bookRepository.findOne(book.getId());
+    public void addBook(Book book) throws ValidatorException, ParserConfigurationException, IOException, SAXException {
+        Optional<Book> bookToVerify = null;
+        try {
+            bookToVerify = bookRepository.findOne(book.getId());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         if (bookToVerify.isPresent()){
             throw new ValidatorException("The ID already exists! Try again with another ID!");
         } else {
-            bookRepository.save(book);
+            try {
+                bookRepository.save(book);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
-    public Set<Book> getAllBooks() {
+    public Set<Book> getAllBooks() throws SQLException {
         Set<Book> books = new HashSet<>();
         bookRepository
                 .findAll()
@@ -35,12 +48,12 @@ public class BookService {
         return books;
     }
 
-    public void deleteBook(long id) {
+    public void deleteBook(long id) throws ParserConfigurationException, IOException, TransformerException, SAXException {
         bookRepository.delete(id);
-        System.out.println("Book deleted successfully!");
+        System.out.println("main.domain.Book deleted successfully!");
     }
 
-    public void updateBook(Long id, String title, String author) {
+    public void updateBook(Long id, String title, String author) throws ParserConfigurationException, IOException, TransformerException, SAXException, SQLException {
         Optional<Book> bookToUpdate = bookRepository.findOne(id);
         Book existingBook = null;
         if (bookToUpdate.isPresent()) {
@@ -49,11 +62,11 @@ public class BookService {
             existingBook.setTitle(title);
             bookRepository.update(existingBook);
         } else {
-            System.out.println("Book with Id " + id + " not exists.");
+            System.out.println("main.domain.Book with Id " + id + " not exists.");
         }
     }
 
-    public Set<Book> filterBooksByTitle(String s) {
+    public Set<Book> filterBooksByTitle(String s) throws SQLException {
         Iterable<Book> books = bookRepository.findAll();
         Set<Book> filteredBooks = new HashSet<>();
         for (Book book : books) {

@@ -1,21 +1,53 @@
+
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><clientFile>
-    <client>
+    <client Id="1">
         <CNP>1111122233344</CNP>
         <lastName>Fieraru</lastName>
         <firstName>Lavinia</firstName>
         <age>35</age>
     </client>
-    <client>
+    <client Id="2">
         <CNP>5647922233344</CNP>
         <lastName>Florea</lastName>
         <firstName>Catalin</firstName>
         <age>18</age>
     </client>
-    <client>
+    <client Id="3">
         <CNP>1155122233344</CNP>
         <lastName>Moraru</lastName>
         <firstName>Tudor</firstName>
         <age>55</age>
+    </client>
+
+    <client Id="4">
+        <CNP>5555555555678</CNP>
+        <lastName>LN4</lastName>
+        <firstName>FN21</firstName>
+        <age>21</age>
+    </client>
+<client Id="5">
+    <CNP>1212121212121</CNP>
+    <lastName>LN5</lastName>
+    <firstName>FN12</firstName>
+    <age>12</age>
+</client>
+<client Id="7">
+    <CNP>7777777777777</CNP>
+    <lastName>LN7</lastName>
+    <firstName>FN7</firstName>
+    <age>7</age>
+</client>
+    <client Id="8">
+        <CNP>8888888888888</CNP>
+        <lastName>LN8</lastName>
+        <firstName>FN8</firstName>
+        <age>8</age>
+    </client>
+    <client Id="9">
+        <CNP>9999999999999</CNP>
+        <lastName>LN9</lastName>
+        <firstName>FN9</firstName>
+        <age>9</age>
     </client>
 
 </clientFile>

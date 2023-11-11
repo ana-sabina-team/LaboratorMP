@@ -1,72 +1,99 @@
 package main.service;
 
-
 import main.domain.Client;
 import main.domain.validators.ValidatorException;
-import main.repository.Repository;
 
+import main.repository.ClientDatabaseRepository;
+import main.repository.Repository;
+import org.xml.sax.SAXException;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 
 public class ClientService {
-    private Repository<Long, Client> repository;
+    private Repository<Long, Client> clientRepository;
 
-    public ClientService(Repository<Long, Client> repository) {
-        this.repository = repository;
+    public ClientService(Repository<Long, Client> clientRepository) {
+        this.clientRepository = clientRepository;
     }
 
-    public void addClient(Client client) throws ValidatorException {
-        Optional<Client> clientToVerify = repository.findOne(client.getId());
+    public void addClient(Client client) throws ValidatorException, ParserConfigurationException, IOException, TransformerException, SAXException {
+        Optional<Client> clientToVerify = null;
+        try {
+            clientToVerify = clientRepository.findOne(client.getId());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
-        if (clientToVerify.isPresent()){
+        if (clientToVerify.isPresent()) {
             throw new ValidatorException("The ID already exists! Try again with another ID!");
         } else {
-        repository.save(client);
+            try {
+                clientRepository.save(client);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
     }
+
 
     public Set<Client> getAllClients() {
-        Iterable<Client> clients = repository.findAll();
-        return StreamSupport.stream(clients.spliterator(), false).collect(Collectors.toSet());
-    }
-
-    public void deleteClient(long id){
-        Optional<Client> clientToDelete = repository.findOne(id);
-        Client existingClient = null;
-        if (clientToDelete.isPresent()) {
-            existingClient = clientToDelete.get();
+        Set<Client> clients = new HashSet<>();
+        try {
+            clientRepository.findAll().forEach(clients::add);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
-        repository.delete(existingClient.getId());
-        System.out.println("Client deleted successfully!");
+        return clients;
     }
 
-    public void updateClient(Long id,String lastName,String firstName) {
+    public List<Client> delete(long id) throws ParserConfigurationException, IOException, TransformerException, SAXException {
+        clientRepository.delete(id);
+        System.out.println("Client deleted successfully!");
+        return null;
+    }
 
-        Optional<Client> clientToUpdate = repository.findOne(id);
+    public List<Client> updateClient(Long id, String lastName) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 
-       Client existingClient = null;
+
+        Optional<Client> clientToUpdate = null;
+        try {
+            clientToUpdate = clientRepository.findOne(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Client existingClient = null;
+
         if (clientToUpdate.isPresent()) {
-            // If the client exists, update its title and author.
-
             existingClient = clientToUpdate.get();
             existingClient.setLastName(lastName);
-            existingClient.setFirstName(firstName);
-
         }
-        // Now, call the update method to save the changes.
-        repository.update(existingClient);
+        clientRepository.update(existingClient);
 
+        return null;
     }
 
-    public Set<Client> filterClientsByLastName(String s) {
-        Iterable<Client> clients = repository.findAll();
-        Set<Client> filteredClients= new HashSet<>();
-        clients.forEach(filteredClients::add);
-        filteredClients.removeIf(student -> !student.getLastName().contains(s));
 
+
+    public Set<Client> filterClientsByLastName(String s) {
+        Iterable<Client> clients = null;
+        try {
+            clients = clientRepository.findAll();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        Set<Client> filteredClients = new HashSet<>();
+        for (Client client : clients) {
+            if (client.getLastName().contains(s)) {
+                filteredClients.add(client);
+            }
+        }
         return filteredClients;
     }
 }
