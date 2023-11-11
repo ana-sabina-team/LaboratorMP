@@ -1,7 +1,9 @@
 package main.repository;
 
+import main.domain.Book;
 import main.domain.Client;
 import main.domain.validators.Validator;
+import main.domain.validators.ValidatorException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -20,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class ClientXmlRepository extends InMemoryRepository<Long, Client> {
     private static Document document; //se initialize o singura data
@@ -27,7 +30,22 @@ public class ClientXmlRepository extends InMemoryRepository<Long, Client> {
     public ClientXmlRepository(Validator<Client> validator) {
         super(validator);
     }
-
+    @Override
+    public Optional<Client> save(Client entity) throws ValidatorException {
+        try {
+            saveToXml(entity);
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<Client> optional = super.save(entity);
+        return optional;
+    }
     public static void saveToXml(Client client) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 
         Document document = getDocument();
@@ -96,7 +114,6 @@ public class ClientXmlRepository extends InMemoryRepository<Long, Client> {
         Node titleNode = taglist.item(0);
         return titleNode != null ? titleNode.getTextContent() : null;
     }
-
     public static List<Client> deleteFromXmlByClientLastName(String lastNameToDelete) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 
         Element clientFileElement = getClientFileElement();
@@ -119,7 +136,27 @@ public class ClientXmlRepository extends InMemoryRepository<Long, Client> {
 
         return null;
     }
-
+//    @Override
+//    public Optional<Client> delete(Long id) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+//        Element clientFileElement = getClientFileElement();
+//        Document document = getDocument();
+//
+//
+//        NodeList clientNodes = clientFileElement.getElementsByTagName("client");
+//
+//        for (int i = 0; i < clientNodes.getLength(); i++) {
+//            Element clientElement = (Element) clientNodes.item(i);
+//            Optional<Client> deletedClient = super.delete(id);
+//            if (deletedClient.isPresent()) {
+//                clientFileElement.removeChild(clientElement);
+//            }
+//        }
+//
+//        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//        transformer.transform(new DOMSource(document), new StreamResult(new FileOutputStream("data/clientFile.xml")));
+//
+//        return null;
+//    }
     public static List<Client> updateLastNameInXml(String lastNameToUpdate, String newLastName) throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Document document = getDocument();
         Element clientFileElement = document.getDocumentElement();
@@ -150,7 +187,6 @@ public class ClientXmlRepository extends InMemoryRepository<Long, Client> {
         if (document != null) {
             return document;
         }
-        //punem ce returneaza
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         document = documentBuilder.parse("data/clientFile.xml");

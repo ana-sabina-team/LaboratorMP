@@ -51,7 +51,7 @@ public class Book extends BaseEntity<Long> {
 
     @Override
     public String toString() {
-        return "Book{" +
+        return "main.domain.Book{" +
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
                 ", yearOfPublication=" + DATE_FORMAT_PUBLICATION_YEAR.format(yearOfPublication) +

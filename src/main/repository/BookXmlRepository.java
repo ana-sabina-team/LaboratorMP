@@ -3,6 +3,7 @@ package main.repository;
 import main.domain.Book;
 import main.domain.Client;
 import main.domain.validators.Validator;
+import main.domain.validators.ValidatorException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -23,6 +24,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class BookXmlRepository  extends InMemoryRepository<Long, Book>{
 
@@ -32,24 +34,38 @@ public class BookXmlRepository  extends InMemoryRepository<Long, Book>{
         super(validator);
     }
 
-
+    @Override
+    public Optional<Book> save(Book entity) throws ValidatorException {
+        try {
+            saveToXml(entity);
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        }
+        Optional<Book> optional = super.save(entity);
+        return optional;
+    }
     public static void saveToXml(Book book) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 
         Document document = getDocument();
         Element bookStoreElement = document.getDocumentElement();
 
-        //CREATE A NEW BOOK element
+
         Element newBookElement = document.createElement("book");
         bookStoreElement.appendChild(newBookElement);
-        //add new title
+
         Element newTitleElement = document.createElement("title");
         newTitleElement.setTextContent(book.getTitle());
         newBookElement.appendChild(newTitleElement);
-        //add new author
+
         Element newAuthorElement = document.createElement("author");
         newAuthorElement.setTextContent(book.getAuthor());
         newBookElement.appendChild(newAuthorElement);
-        //add the date
 
         Element newYearOfPublication = document.createElement("yearOfPublication");
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -131,7 +147,6 @@ public class BookXmlRepository  extends InMemoryRepository<Long, Book>{
             String title = getTextContentFromTag("title", bookElement);
 
             if (titleToUpdate.equals(title)) {
-                // Update the title with the new title
                 Element titleElement = (Element) bookElement.getElementsByTagName("title").item(0);
                 titleElement.setTextContent(newTitle);
             }
@@ -153,11 +168,9 @@ public class BookXmlRepository  extends InMemoryRepository<Long, Book>{
             return document;
         }
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        //newInstance of DBF
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        //create a new Document object
         document = documentBuilder.parse("data/book.xml");
-        //create a tree like object
+
         return document;
     }
 

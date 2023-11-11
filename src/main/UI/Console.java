@@ -29,16 +29,11 @@ public class Console {
     private ClientService clientService;
     private BookService bookService;
     private Scanner scanner;
-    private ClientXmlRepository clientXmlRepository;
-    private BookXmlRepository bookXmlRepository;
 
-
-    public Console(ClientService clientService, BookService bookService, ClientXmlRepository clientXmlRepository, BookXmlRepository bookXmlRepository) {
+    public Console(ClientService clientService, BookService bookService) {
         this.clientService = clientService;
         this.bookService = bookService;
         this.scanner = new Scanner(System.in);
-        this.bookXmlRepository = new BookXmlRepository(bookValidator);
-        this.clientXmlRepository=new ClientXmlRepository(clientValidator);
     }
 
     private void printMenu() {
@@ -571,7 +566,7 @@ public class Console {
         if (book == null || book.getId() < 0) {
         }
         try {
-            BookXmlRepository.saveToXml(book);
+            bookService.addBook(book);
         } catch (ValidatorException e) {
             e.printStackTrace();
         }
