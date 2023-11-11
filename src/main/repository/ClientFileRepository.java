@@ -3,7 +3,10 @@ package main.repository;
 import main.domain.Client;
 import main.domain.validators.Validator;
 import main.domain.validators.ValidatorException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,7 +29,8 @@ public class ClientFileRepository extends InMemoryRepository<Long, Client> {
 
     @Override
     public Optional<Client> delete(Long id) {
-        Optional<Client> deletedClient = super.delete(id);
+        Optional<Client> deletedClient = null;
+        deletedClient = super.delete(id);
         if (deletedClient.isPresent()) {
             updateFile();
         }

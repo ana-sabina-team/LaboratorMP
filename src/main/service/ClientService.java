@@ -4,7 +4,11 @@ package main.service;
 import main.domain.Client;
 import main.domain.validators.ValidatorException;
 import main.repository.Repository;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
@@ -18,7 +22,9 @@ public class ClientService {
         this.repository = repository;
     }
 
-    public void addClient(Client client) throws ValidatorException {
+
+
+    public void addClient(Client client) throws ValidatorException, ParserConfigurationException, IOException, TransformerException, SAXException {
         Optional<Client> clientToVerify = repository.findOne(client.getId());
 
         if (clientToVerify.isPresent()){
@@ -33,7 +39,7 @@ public class ClientService {
         return StreamSupport.stream(clients.spliterator(), false).collect(Collectors.toSet());
     }
 
-    public void deleteClient(long id){
+    public void deleteClient(long id) {
         Optional<Client> clientToDelete = repository.findOne(id);
         Client existingClient = null;
         if (clientToDelete.isPresent()) {

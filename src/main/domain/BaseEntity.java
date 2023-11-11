@@ -3,13 +3,11 @@ package main.domain;
 public class BaseEntity<ID> {
     private ID id;
 
-
     BaseEntity(ID id) {
         this.id = id;
     }
 
     public BaseEntity() {
-
     }
 
     public ID getId() {
@@ -22,7 +20,7 @@ public class BaseEntity<ID> {
 
     @Override
     public String toString() {
-        return "BaseEntity{" +
+        return "main.domain.BaseEntity{" +
                 "id=" + id +
                 '}';
     }

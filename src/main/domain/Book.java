@@ -48,13 +48,13 @@ public class Book extends BaseEntity<Long> {
     public void setYearOfPublication(LocalDate yearOfPublication) {
         this.yearOfPublication = yearOfPublication;
     }
-
     @Override
     public String toString() {
         return "Book{" +
+                "ID='" + getId() + '\'' +
                 "title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", yearOfPublication=" + DATE_FORMAT_PUBLICATION_YEAR.format(yearOfPublication) +
+                ", yearOfPublication=" + (yearOfPublication != null ?  DATE_FORMAT_PUBLICATION_YEAR.format(yearOfPublication) : "") +
                 '}';
     }
 }

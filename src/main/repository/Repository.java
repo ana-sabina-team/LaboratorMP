@@ -2,7 +2,11 @@ package main.repository;
 
 import main.domain.BaseEntity;
 import main.domain.validators.ValidatorException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.util.Optional;
 
 public interface Repository<ID, T extends BaseEntity<ID>> {
@@ -15,4 +19,5 @@ public interface Repository<ID, T extends BaseEntity<ID>> {
     Optional<T> delete(ID id);
 
     Optional<T> update(T entity) throws ValidatorException;
+
 }

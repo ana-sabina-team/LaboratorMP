@@ -39,6 +39,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="postgresql" level="project" />
   </component>
   <component name="SonarLintModuleSettings">
     <option name="uniqueId" value="7c82a5f9-6ec7-4df4-a4b9-a557d20af535" />

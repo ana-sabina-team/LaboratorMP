@@ -3,7 +3,11 @@ package main.repository;
 import main.domain.BaseEntity;
 import main.domain.validators.Validator;
 import main.domain.validators.ValidatorException;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -41,7 +45,7 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
             throw new IllegalArgumentException("id must not be null");
         }
         validator.validate(entity);
-        return Optional.ofNullable(entities.putIfAbsent(entity.getId(), entity));
+        return Optional.ofNullable(entities.putIfAbsent((ID) entity.getId(), entity));
     }
 
 
@@ -60,6 +64,6 @@ public class InMemoryRepository<ID, T extends BaseEntity<ID>> implements Reposit
             throw new IllegalArgumentException("entity must not be null ");
         }
         validator.validate(entity);
-        return Optional.ofNullable(entities.computeIfPresent(entity.getId(), (k, v) -> entity));
+        return Optional.ofNullable(entities.computeIfPresent((ID) entity.getId(), (k, v) -> entity));
     }
 }

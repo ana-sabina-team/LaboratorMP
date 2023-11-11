@@ -3,6 +3,7 @@ package main.UI;
 
 import main.domain.Book;
 import main.domain.Client;
+import main.domain.validators.Validator;
 import main.domain.validators.ValidatorException;
 import main.repository.ClientXmlRepository;
 import main.repository.BookXmlRepository;
@@ -17,27 +18,31 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 
 import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
 
 public class Console {
-    private Validator<Book> bookValidator;
-    private Validator<Client> clientValidator;
+
     private ClientService clientService;
-    private BookService bookService;
+
+    private BookService bookInMemoryService;
+    private BookService bookXMLService;
+    private BookService bookDatabaseService;
+    private BookService bookFileService;
     private Scanner scanner;
-    private ClientXmlRepository clientXmlRepository;
-    private BookXmlRepository bookXmlRepository;
 
 
-    public Console(ClientService clientService, BookService bookService, ClientXmlRepository clientXmlRepository, BookXmlRepository bookXmlRepository) {
+    public Console(ClientService clientService, BookService bookInMemoryService, BookService bookDatabaseService, BookService bookXMLService, BookService bookFileService) {
         this.clientService = clientService;
-        this.bookService = bookService;
+        this.bookInMemoryService = bookInMemoryService;
+        this.bookDatabaseService = bookDatabaseService;
+        this.bookXMLService = bookXMLService;
+        this.bookFileService = bookFileService;
         this.scanner = new Scanner(System.in);
-        this.bookXmlRepository = new BookXmlRepository(bookValidator);
-        this.clientXmlRepository=new ClientXmlRepository(clientValidator);
+
     }
 
     private void printMenu() {
@@ -73,19 +78,23 @@ public class Console {
             System.out.println("1. Manual add");
             System.out.println("2. To file add");
             System.out.println("3. To XML file add");
+            System.out.println("4. To DB  add");
             System.out.println("0. Back");
             Scanner scanner = new Scanner(System.in);
             String option = scanner.next();
 
             switch (option) {
                 case "1":
-                    this.addBook();
+                    this.addBook(bookInMemoryService);
                     break;
                 case "2":
-                    this.addBookFile();
+                    this.addBook(bookFileService);
                     break;
                 case "3":
-                    this.addBookXML();
+                    this.addBook(bookXMLService);
+                    break;
+                case "4":
+                    this.addBook(bookDatabaseService);
                     break;
                 case "0":
                     return;
@@ -95,20 +104,25 @@ public class Console {
             }
         }
     }
-    private void runSubMenuDeleteBooks() throws ParserConfigurationException, IOException, TransformerException, SAXException {
+
+    private void runSubMenuDeleteBooks() throws IOException {
         while (true) {
             System.out.println("1. Delete file");
             System.out.println("2. Delete XML");
+            System.out.println("3.Delete from DB");
             System.out.println("0. Back");
             Scanner scanner = new Scanner(System.in);
             String option = scanner.next();
 
             switch (option) {
                 case "1":
-                    this.deleteBook();
+                    this.deleteBook(bookFileService);
                     break;
                 case "2":
-                    this.deleteBookFromXMLByTitle();
+                    this.deleteBook(bookXMLService);
+                    break;
+                case "3":
+                   this.deleteBook(bookDatabaseService);
                     break;
                 case "0":
                     return;
@@ -118,20 +132,25 @@ public class Console {
             }
         }
     }
-    private void runSubMenuUpdateBooks() throws ParserConfigurationException, IOException, TransformerException, SAXException {
+
+    private void runSubMenuUpdateBooks() {
         while (true) {
             System.out.println("1. Update file");
             System.out.println("2. Update XML");
+            System.out.println("3. Update in DB");
             System.out.println("0. Back");
             Scanner scanner = new Scanner(System.in);
             String option = scanner.next();
 
             switch (option) {
                 case "1":
-                    this.updateBook();
+                    this.updateBook(bookFileService);
                     break;
                 case "2":
-                    this.updateTitleFromXML();
+                    this.updateBook(bookXMLService);
+                    break;
+                case "3":
+                    this.updateBook(bookDatabaseService);
                     break;
                 case "0":
                     return;
@@ -141,7 +160,8 @@ public class Console {
             }
         }
     }
-    private void runSubMenuAddClients() {
+
+    private void runSubMenuAddClients() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
             System.out.println("1. Manual add");
             System.out.println("2. To file add");
@@ -168,6 +188,7 @@ public class Console {
             }
         }
     }
+
     private void runSubMenuPrintClients() {
         while (true) {
             System.out.println("1.  Print from file");
@@ -191,20 +212,25 @@ public class Console {
             }
         }
     }
+
     private void runSubMenuPrintBooks() {
         while (true) {
-            System.out.println("1.  Print from file");
+            System.out.println("1. Print from file");
             System.out.println("2. Print from XML");
+            System.out.println("3. Print from Database");
             System.out.println("0. Back");
             Scanner scanner = new Scanner(System.in);
             String option = scanner.next();
 
             switch (option) {
                 case "1":
-                    this.printBook();
+                    this.printBook(bookFileService);
                     break;
                 case "2":
-                    this.showBooksFromXML();
+                    this.printBook(bookXMLService);
+                    break;
+                case "3":
+                    this.printBook(bookDatabaseService);
                     break;
                 case "0":
                     return;
@@ -238,6 +264,7 @@ public class Console {
             }
         }
     }
+
     private void runSubMenuUpdateClients() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
             System.out.println("1. Update file");
@@ -303,9 +330,10 @@ public class Console {
         Set<Client> clients = clientService.getAllClients();
         clients.stream().forEach(System.out::println);
     }
-    private void showClientsFromXML(){
-        try{
-            List<Client> clients= ClientXmlRepository.loadData();
+
+    private void showClientsFromXML() {
+        try {
+            List<Client> clients = ClientXmlRepository.loadData();
             clients.forEach(System.out::println);
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
@@ -316,7 +344,7 @@ public class Console {
         }
     }
 
-    private void addClientManual() {
+    private void addClientManual() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("id = ");
@@ -348,6 +376,14 @@ public class Console {
             clientService.addClient(client);
         } catch (ValidatorException e) {
             e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -360,6 +396,14 @@ public class Console {
             clientService.addClient(client);
         } catch (ValidatorException e) {
             e.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (TransformerException e) {
+            throw new RuntimeException(e);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -395,31 +439,34 @@ public class Console {
         }
     }
 
-    private void deleteClientFromFile() {
+
+    private void deleteClientFromFile() throws IOException {
         System.out.println("Enter the ID of the client you want to delete  ");
         Scanner scanner = new Scanner(System.in);
         long id = scanner.nextLong();
         clientService.deleteClient(id);
     }
+
     private void deleteClientFromXMLByLastName() throws ParserConfigurationException, IOException, SAXException, TransformerException {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the last name you want to delete ");
-        String clientToDelete=scanner.next();
+        String clientToDelete = scanner.next();
 
-        List<Client> clients=ClientXmlRepository.deleteFromXmlByClientLastName(clientToDelete);
+        List<Client> clients = ClientXmlRepository.deleteFromXmlByClientLastName(clientToDelete);
 
 
     }
 
     private List<Client> updateLastNameFromXML() throws ParserConfigurationException, IOException, TransformerException, SAXException {
-        Scanner sc=new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
         System.out.println("enter the last name to update: ");
-        String lastNameToUpdate=sc.next();
+        String lastNameToUpdate = sc.next();
         System.out.println("enter the new last name : ");
-        String newLastName=sc.next();
+        String newLastName = sc.next();
         List<Client> clients = ClientXmlRepository.updateLastNameInXml(lastNameToUpdate, newLastName);
         return clients;
     }
+
     private Client readClient() {
         System.out.println("Read client {id, CNP, lastName, firstName, age}");
 
@@ -441,7 +488,7 @@ public class Console {
         return null;
     }
 
-    //Books
+    //BOOKS
 
     public void runSubMenuBook() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
@@ -458,7 +505,7 @@ public class Console {
                     this.runSubMenuAddBooks();
                     break;
                 case "2":
-                   this.runSubMenuDeleteBooks();
+                    this.runSubMenuDeleteBooks();
                     break;
                 case "3":
                     this.runSubMenuUpdateBooks();
@@ -478,14 +525,14 @@ public class Console {
         }
     }
 
-    private void printBook() {
+    private void printBook(BookService bookService) {
         System.out.println("All books -->");
         Set<Book> books = bookService.getAllBooks();
         books.forEach(System.out::println);
     }
 
 
-    private void addBook() {
+    private void addBook(BookService service) {
         Scanner scanner = new Scanner(System.in);
         System.out.println("id= ");
         long id = scanner.nextLong();
@@ -505,10 +552,10 @@ public class Console {
         System.out.println("You entered: " + date);
 
         Book book = new Book(id, title, author, date);
-        bookService.addBook(book);
+        service.addBook(book);
     }
 
-    public void updateBook() {
+    public void updateBook(BookService service) {
         try {
             Scanner scanner = new Scanner(System.in);
             System.out.println("enter the ID of the book you want to UPDATE ");
@@ -517,70 +564,57 @@ public class Console {
             String newTitle = scanner.next();
             System.out.println("Enter the new Author");
             String newAuthor = scanner.next();
-            this.bookService.updateBook(idToUpdate, newTitle, newAuthor);
+            System.out.println("Date of publication? (format: yyyy-MM-dd)");
+            String dateInput = scanner.next();
+
+            LocalDate newDate  = LocalDate.parse(dateInput, DATE_FORMAT_PUBLICATION_YEAR);
+            service.updateBook(idToUpdate, newTitle, newAuthor, newDate);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-    private void deleteBook() {
+    private void deleteBook(BookService bookService) {
         System.out.println("Enter the ID of the book you want to delete  ");
         Scanner scanner = new Scanner(System.in);
         long id = scanner.nextLong();
-        bookService.deleteBook(id);
-    }
-
-    private Book readBook() {
-        System.out.println("Read Book {id, title, author, date}");
-
-        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
         try {
-            Long id = Long.valueOf(bufferRead.readLine());
-            String title = bufferRead.readLine();
-            String author = bufferRead.readLine();
-            String releaseDateStr = bufferRead.readLine();
-
-            // Parse the date string into a Date object
-            LocalDate releaseDate = null;
-            releaseDate = LocalDate.parse(releaseDateStr, DATE_FORMAT_PUBLICATION_YEAR);
-
-            Book book = new Book(id, title, author, releaseDate);
-            book.setId(id);
-
-            return book;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    private void addBookFile() {
-        Book book = readBook();
-        if (book == null || book.getId() < 0) {
-        }
-        try {
-            bookService.addBook(book);
-        } catch (ValidatorException e) {
-            e.printStackTrace();
+            bookService.delete(id);
+        } catch (ParserConfigurationException | TransformerException | SAXException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    private void addBookXML(){
-        Book book = readBook();
-        if (book == null || book.getId() < 0) {
-        }
-        try {
-            BookXmlRepository.saveToXml(book);
-        } catch (ValidatorException e) {
-            e.printStackTrace();
-        }
-    }
+
+//    private Book readBook() {
+//        System.out.println("Read Book {id, title, author, date}");
+//
+//        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
+//        try {
+//            Long id = Long.valueOf(bufferRead.readLine());
+//            String title = bufferRead.readLine();
+//            String author = bufferRead.readLine();
+//            String releaseDateStr = bufferRead.readLine();
+//
+//            // Parse the date string into a Date object
+//            LocalDate releaseDate = null;
+//            releaseDate = LocalDate.parse(releaseDateStr, DATE_FORMAT_PUBLICATION_YEAR);
+//
+//            Book book = new Book(id, title, author, releaseDate);
+//            book.setId(id);
+//
+//            return book;
+//        } catch (IOException ex) {
+//            ex.printStackTrace();
+//        }
+//        return null;
+//    }
 
     private void filterBooks() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Searching for: ");
         String search = scanner.next();
-        Set<Book> books = bookService.filterBooksByTitle(search);
+        Set<Book> books = bookDatabaseService.filterBooksByTitle(search);
 
         if (books.isEmpty()) {
             System.out.println("No books found matching the search criteria.");
@@ -590,48 +624,4 @@ public class Console {
             books.forEach(book -> System.out.println(book));
         }
     }
-
-    private void showBooksFromXML() {
-        try {
-            List<Book> books = BookXmlRepository.loadData();
-            books.forEach(System.out::println);
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-
-
-    private void deleteBookFromXMLByTitle() throws ParserConfigurationException, IOException, SAXException, TransformerException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter the title you want to delete ");
-        String bookToDelete = scanner.next();
-
-        List<Book> books = BookXmlRepository.deleteFromXmlByBookTitle(bookToDelete);
-
-
-    }
-
-
-    private List<Book> updateTitleFromXML() throws ParserConfigurationException, IOException, TransformerException, SAXException {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("enter the title to update: ");
-        String titleToUpdate = sc.next();
-        System.out.println("enter the new title : ");
-        String newTitle = sc.next();
-        List<Book> books = BookXmlRepository.updateTitleInXml(titleToUpdate, newTitle);
-        return books;
-
-    }
-
-
-
-
-
-
 }

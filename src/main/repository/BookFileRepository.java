@@ -1,7 +1,6 @@
 package main.repository;
 
 import main.domain.Book;
-import main.domain.Client;
 import main.domain.validators.Validator;
 import main.domain.validators.ValidatorException;
 
@@ -91,14 +90,14 @@ public class BookFileRepository extends InMemoryRepository<Long, Book> {
 
     @Override
     public Optional<Book> delete(Long id) {
-        Optional<Book> deletedBook = super.delete(id);
+        Optional<Book> deletedBook;
+        deletedBook = super.delete(id);
         if (deletedBook.isPresent()) {
             updateFile();
         }
         return deletedBook;
     }
 
-    // Add this method to update the file after a client is deleted
     private void updateFile() {
         Path path = Paths.get(filename);
         List<String> lines = new ArrayList<>();
