@@ -36,6 +36,7 @@ public class Console {
 
 
     public Console(ClientService clientService, BookService bookInMemoryService, BookService bookDatabaseService, BookService bookXMLService, BookService bookFileService) {
+    public Console(ClientService clientService, BookService bookService) {
         this.clientService = clientService;
         this.bookInMemoryService = bookInMemoryService;
         this.bookDatabaseService = bookDatabaseService;
@@ -584,31 +585,6 @@ public class Console {
             throw new RuntimeException(e);
         }
     }
-
-
-//    private Book readBook() {
-//        System.out.println("Read Book {id, title, author, date}");
-//
-//        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-//        try {
-//            Long id = Long.valueOf(bufferRead.readLine());
-//            String title = bufferRead.readLine();
-//            String author = bufferRead.readLine();
-//            String releaseDateStr = bufferRead.readLine();
-//
-//            // Parse the date string into a Date object
-//            LocalDate releaseDate = null;
-//            releaseDate = LocalDate.parse(releaseDateStr, DATE_FORMAT_PUBLICATION_YEAR);
-//
-//            Book book = new Book(id, title, author, releaseDate);
-//            book.setId(id);
-//
-//            return book;
-//        } catch (IOException ex) {
-//            ex.printStackTrace();
-//        }
-//        return null;
-//    }
 
     private void filterBooks() {
         Scanner scanner = new Scanner(System.in);
