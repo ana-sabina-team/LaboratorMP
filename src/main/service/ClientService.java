@@ -49,7 +49,7 @@ public class ClientService {
         System.out.println("Client deleted successfully!");
     }
 
-    public void updateClient(Long id,String lastName,String firstName) {
+    public void updateClient(Long id,String lastName) {
 
         Optional<Client> clientToUpdate = repository.findOne(id);
 
@@ -59,10 +59,8 @@ public class ClientService {
 
             existingClient = clientToUpdate.get();
             existingClient.setLastName(lastName);
-            existingClient.setFirstName(firstName);
-
         }
-        // Now, call the update method to save the changes.
+
         repository.update(existingClient);
 
     }

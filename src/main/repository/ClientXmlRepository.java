@@ -105,7 +105,7 @@ public class ClientXmlRepository extends InMemoryRepository<Long, Client> {
         client.setFirstName(firstName);
 
         String age=getTextContentFromTag("age",clientElement);
-        client.setAge(String.valueOf(client.getAge()));
+        client.setAge(Double.valueOf(client.getAge()));
 
         return client;
     }

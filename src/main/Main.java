@@ -6,11 +6,7 @@ import main.domain.Client;
 import main.domain.validators.BookValidator;
 import main.domain.validators.ClientValidator;
 import main.domain.validators.Validator;
-import main.repository.BookFileRepository;
-import main.repository.BookXmlRepository;
-import main.repository.ClientFileRepository;
-import main.repository.ClientXmlRepository;
-import main.repository.Repository;
+import main.repository.*;
 import main.service.BookService;
 import main.service.ClientService;
 import org.xml.sax.SAXException;
@@ -28,9 +24,11 @@ public class Main {
     public static void main(String[] args) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 
         Validator<Client> clientValidator = new ClientValidator();
-        Repository<Long, Client> clientRepository = new ClientFileRepository(clientValidator, "ClientFile");
-        ClientService clientService = new ClientService(clientRepository);
 
+        ClientService clientInMemoryService = new ClientService(new ClientRepositoryImpl(clientValidator));
+        ClientService clientFileService = new ClientService(new ClientFileRepository(clientValidator, "ClientFile"));
+        ClientService clientXmlService = new ClientService(new ClientXmlRepository(clientValidator));
+        ClientService clientDatabaseService = new ClientService(new ClientDatabaseRepository(clientValidator));
 
         Validator<Book> bookValidator = new BookValidator();
 
@@ -39,7 +37,12 @@ public class Main {
         BookService bookXMLService = new BookService(new BookXmlRepository(bookValidator));
         BookService bookFileService = new BookService(new BookFileRepository(bookValidator, "BookFile"));
 
-        Console console = new Console(clientService, bookInMemoryService, bookDatabaseService, bookXMLService, bookFileService);
+
+
+
+
+
+        Console console = new Console(bookInMemoryService, bookXMLService,  bookDatabaseService,  bookFileService,  clientInMemoryService,  clientFileService,  clientXmlService,  clientDatabaseService);
         console.runMenu();
 
         System.out.println("bye ^_^ thank you >(*_*)<");

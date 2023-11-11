@@ -6,7 +6,7 @@ public class Client extends BaseEntity<Long> {
     private String CNP;
     private String lastName;
     private String firstName;
-    private int age;
+    private double age;
 
     public Client() {
         super(id);
@@ -41,9 +41,9 @@ public class Client extends BaseEntity<Long> {
         this.firstName = firstName;
     }
 
-    public int getAge() {return age;}
+    public double getAge() {return age;}
 
-    public void setAge(String agge) {
+    public void setAge(double age) {
         this.age = age;
     }
 

@@ -26,24 +26,25 @@ import static main.service.BookService.DATE_FORMAT_PUBLICATION_YEAR;
 
 public class Console {
 
-    private ClientService clientService;
-
     private BookService bookInMemoryService;
     private BookService bookXMLService;
     private BookService bookDatabaseService;
     private BookService bookFileService;
     private Scanner scanner;
+    private ClientService clientInMemoryService;
+    private ClientService clientFileService;
+    private ClientService clientXmlService;
+    private ClientService  clientDatabaseService;
 
-
-    public Console(ClientService clientService, BookService bookInMemoryService, BookService bookDatabaseService, BookService bookXMLService, BookService bookFileService) {
-    public Console(ClientService clientService, BookService bookService) {
-        this.clientService = clientService;
+    public Console(BookService bookInMemoryService, BookService bookXMLService, BookService bookDatabaseService, BookService bookFileService, ClientService clientInMemoryService, ClientService clientFileService, ClientService clientXmlService, ClientService clientDatabaseService) {
         this.bookInMemoryService = bookInMemoryService;
-        this.bookDatabaseService = bookDatabaseService;
         this.bookXMLService = bookXMLService;
+        this.bookDatabaseService = bookDatabaseService;
         this.bookFileService = bookFileService;
-        this.scanner = new Scanner(System.in);
-
+        this.clientInMemoryService = clientInMemoryService;
+        this.clientFileService = clientFileService;
+        this.clientXmlService = clientXmlService;
+        this.clientDatabaseService = clientDatabaseService;
     }
 
     private void printMenu() {
@@ -74,6 +75,234 @@ public class Console {
         }
     }
 
+    private void runSubMenuClient() {
+        while (true) {
+            System.out.println("1. Add sub-menu ");
+            System.out.println("2. Delete sub-menu");
+            System.out.println("3. Update sub-menu");
+            System.out.println("4. Print sub-menu");
+            System.out.println("5. Filter from file");
+            System.out.println("0. Back");
+            Scanner scanner = new Scanner(System.in);
+            String option = scanner.next();
+
+            switch (option) {
+                case "1":
+                    this.runSubMenuAddClients();
+                    break;
+                case "2":
+                    this.runSubMenuDeleteClients();
+                    break;
+                case "3":
+                    this.runSubMenuUpdateClients();
+                    break;
+                case "4":
+                    this.runSubMenuPrintClients();
+                    break;
+                case "5":
+                    this.filterClients(clientFileService);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("Invalid option.");
+            }
+        }
+    }
+    private void runSubMenuAddClients()  {
+        while (true) {
+            System.out.println("1. Manual add");
+            System.out.println("2. To file add");
+            System.out.println("3. To XML file add");
+            System.out.println("4. To Database add");
+            System.out.println("0. Back");
+            Scanner scanner = new Scanner(System.in);
+            String option = scanner.next();
+
+            switch (option) {
+                case "1":
+                    this.addClient(clientInMemoryService);
+                    break;
+                case "2":
+                    this.addClient(clientFileService);
+                    break;
+                case "3":
+                    this.addClient(clientXmlService);
+                    break;
+                case "4":
+                    this.addClient(clientDatabaseService);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("this option is not yet implemented");
+                    break;
+            }
+        }
+    }
+    private void runSubMenuPrintClients() {
+        while (true) {
+            System.out.println("1.  Print from memory");
+            System.out.println("2.  Print from file");
+            System.out.println("3. Print from XML");
+            System.out.println("4. Print from Database");
+            System.out.println("0. Back");
+            Scanner scanner = new Scanner(System.in);
+            String option = scanner.next();
+
+            switch (option) {
+                case "1":
+                    this.printClients(clientInMemoryService);
+                    break;
+                case "2":
+                    this.printClients(clientFileService);
+                    break;
+                case "3":
+                    this.printClients(clientXmlService);
+                    break;
+                case "4":
+                    this.printClients(clientDatabaseService);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("this option is not yet implemented");
+                    break;
+            }
+        }
+    }
+    private void runSubMenuDeleteClients()  {
+        while (true) {
+            System.out.println("1. Delete memory");
+            System.out.println("2. Delete file");
+            System.out.println("3. Delete XML");
+            System.out.println("4. Delete Database");
+            System.out.println("0. Back");
+            Scanner scanner = new Scanner(System.in);
+            String option = scanner.next();
+
+            switch (option) {
+                case "1":
+                    this.deleteClient(clientInMemoryService);
+                    break;
+                case "2":
+                    this.deleteClient(clientFileService);
+                    break;
+                case "3":
+                    this.deleteClient(clientXmlService);
+                    break;
+                case "4":
+                    this.deleteClient(clientDatabaseService);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("this option is not yet implemented");
+                    break;
+            }
+        }
+    }
+    private void runSubMenuUpdateClients()  {
+        while (true) {
+            System.out.println("1. Update memory");
+            System.out.println("2. Update file");
+            System.out.println("3. Update Xml");
+            System.out.println("4. Update Database");
+            System.out.println("0. Back");
+            Scanner scanner = new Scanner(System.in);
+            String option = scanner.next();
+
+            switch (option) {
+                case "1":
+                    this.updateClient(clientInMemoryService);
+                    break;
+                case "2":
+                    this.updateClient(clientFileService);
+                    break;
+                case "3":
+                    this.updateClient(clientXmlService);
+                    break;
+                case "4":
+                    this.updateClient(clientDatabaseService);
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("this option is not yet implemented");
+                    break;
+            }
+        }
+    }
+
+
+    private void printClients(ClientService clientService) {
+        System.out.println("All clients: \n");
+        Set<Client> clients = clientService.getAllClients();
+        clients.stream().forEach(System.out::println);
+    }
+
+    private void addClient(ClientService clientService){
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("id = ");
+        Long id = scanner.nextLong();
+
+        System.out.println("CNP = ");
+        String CNP = scanner.next();
+
+        System.out.println("Last name = ");
+        String lastName = scanner.next();
+
+        System.out.println("First name = ");
+        String firstName = scanner.next();
+
+        System.out.println("Age = ");
+        int age = scanner.nextInt();
+
+        Client client = new Client(id, CNP, lastName, firstName, age);
+        try {
+            clientService.addClient(client);
+        } catch (TransformerException | ParserConfigurationException | IOException | SAXException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    private void filterClients(ClientService clientService) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Searching for: ");
+        String search = scanner.next();
+        Set<Client> clients = clientService.filterClientsByLastName(search);
+
+        if (clients.isEmpty()) {
+            System.out.println("No Client found matching the search criteria.");
+        } else {
+            System.out.println("Filtered Clients:");
+
+            clients.forEach(client -> System.out.println(client));
+        }
+    }
+
+    public void updateClient(ClientService clientService) {
+        try {
+            Scanner scanner = new Scanner(System.in);
+            System.out.println("enter the ID of the client you want to UPDATE ");
+            long idToUpdate = scanner.nextInt();
+            System.out.println("Enter the new Last Name");
+            String newLastName = scanner.next();
+            clientService.updateClient(idToUpdate, newLastName);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void deleteClient(ClientService clientService)  {
+        System.out.println("Enter the ID of the client you want to delete  ");
+        Scanner scanner = new Scanner(System.in);
+        long id = scanner.nextLong();
+        clientService.deleteClient(id);
+    }
     private void runSubMenuAddBooks() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
             System.out.println("1. Manual add");
@@ -162,58 +391,6 @@ public class Console {
         }
     }
 
-    private void runSubMenuAddClients() throws ParserConfigurationException, IOException, TransformerException, SAXException {
-        while (true) {
-            System.out.println("1. Manual add");
-            System.out.println("2. To file add");
-            System.out.println("3. To XML file add");
-            System.out.println("0. Back");
-            Scanner scanner = new Scanner(System.in);
-            String option = scanner.next();
-
-            switch (option) {
-                case "1":
-                    this.addClientManual();
-                    break;
-                case "2":
-                    this.addClientFile();
-                    break;
-                case "3":
-                    this.addClientXML();
-                    break;
-                case "0":
-                    return;
-                default:
-                    System.out.println("this option is not yet implemented");
-                    break;
-            }
-        }
-    }
-
-    private void runSubMenuPrintClients() {
-        while (true) {
-            System.out.println("1.  Print from file");
-            System.out.println("2. Print from XML");
-            System.out.println("0. Back");
-            Scanner scanner = new Scanner(System.in);
-            String option = scanner.next();
-
-            switch (option) {
-                case "1":
-                    this.printClients();
-                    break;
-                case "2":
-                    this.showClientsFromXML();
-                    break;
-                case "0":
-                    return;
-                default:
-                    System.out.println("this option is not yet implemented");
-                    break;
-            }
-        }
-    }
-
     private void runSubMenuPrintBooks() {
         while (true) {
             System.out.println("1. Print from file");
@@ -242,254 +419,6 @@ public class Console {
         }
     }
 
-    private void runSubMenuDeleteClients() throws ParserConfigurationException, IOException, TransformerException, SAXException {
-        while (true) {
-            System.out.println("1. Delete file");
-            System.out.println("2. Delete XML");
-            System.out.println("0. Back");
-            Scanner scanner = new Scanner(System.in);
-            String option = scanner.next();
-
-            switch (option) {
-                case "1":
-                    this.deleteClientFromFile();
-                    break;
-                case "2":
-                    this.deleteClientFromXMLByLastName();
-                    break;
-                case "0":
-                    return;
-                default:
-                    System.out.println("this option is not yet implemented");
-                    break;
-            }
-        }
-    }
-
-    private void runSubMenuUpdateClients() throws ParserConfigurationException, IOException, TransformerException, SAXException {
-        while (true) {
-            System.out.println("1. Update file");
-            System.out.println("2. Update XML");
-            System.out.println("0. Back");
-            Scanner scanner = new Scanner(System.in);
-            String option = scanner.next();
-
-            switch (option) {
-                case "1":
-                    this.updateClientFromFile();
-                    break;
-                case "2":
-                    this.updateLastNameFromXML();
-                    break;
-                case "0":
-                    return;
-                default:
-                    System.out.println("this option is not yet implemented");
-                    break;
-            }
-        }
-    }
-
-
-    private void runSubMenuClient() throws ParserConfigurationException, IOException, TransformerException, SAXException {
-        while (true) {
-            System.out.println("1. Add sub-menu ");
-            System.out.println("2. Delete sub-menu");
-            System.out.println("3. Update sub-menu");
-            System.out.println("4. Print sub-menu");
-            System.out.println("5. Filter from file");
-            System.out.println("0. Back");
-            Scanner scanner = new Scanner(System.in);
-            String option = scanner.next();
-
-            switch (option) {
-                case "1":
-                    this.runSubMenuAddClients();
-                    break;
-                case "2":
-                    this.runSubMenuDeleteClients();
-                    break;
-                case "3":
-                    this.runSubMenuUpdateClients();
-                    break;
-                case "4":
-                    this.runSubMenuPrintClients();
-                    break;
-                case "5":
-                    this.filterClients();
-                    break;
-                case "0":
-                    return;
-                default:
-                    System.out.println("Invalid option.");
-            }
-        }
-    }
-
-    private void printClients() {
-        System.out.println("All clients: \n");
-        Set<Client> clients = clientService.getAllClients();
-        clients.stream().forEach(System.out::println);
-    }
-
-    private void showClientsFromXML() {
-        try {
-            List<Client> clients = ClientXmlRepository.loadData();
-            clients.forEach(System.out::println);
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void addClientManual() throws ParserConfigurationException, IOException, TransformerException, SAXException {
-        Scanner scanner = new Scanner(System.in);
-
-        System.out.println("id = ");
-        Long id = scanner.nextLong();
-
-        System.out.println("CNP = ");
-        String CNP = scanner.next();
-
-        System.out.println("Last name = ");
-        String lastName = scanner.next();
-
-        System.out.println("First name = ");
-        String firstName = scanner.next();
-
-        System.out.println("Age = ");
-        int age = scanner.nextInt();
-
-        Client client = new Client(id, CNP, lastName, firstName, age);
-        clientService.addClient(client);
-    }
-
-
-    private void addClientFile() {
-
-        Client client = readClient();
-        if (client == null || client.getId() < 0) {
-        }
-        try {
-            clientService.addClient(client);
-        } catch (ValidatorException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (TransformerException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void addClientXML() {
-
-        Client client = readClient();
-        if (client == null || client.getId() < 0) {
-        }
-        try {
-            clientService.addClient(client);
-        } catch (ValidatorException e) {
-            e.printStackTrace();
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } catch (TransformerException e) {
-            throw new RuntimeException(e);
-        } catch (SAXException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    private void filterClients() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Searching for: ");
-        String search = scanner.next();
-        Set<Client> clients = clientService.filterClientsByLastName(search);
-
-        if (clients.isEmpty()) {
-            System.out.println("No Client found matching the search criteria.");
-        } else {
-            System.out.println("Filtered Clients:");
-
-            clients.forEach(client -> System.out.println(client));
-        }
-    }
-
-    public void updateClientFromFile() {
-        try {
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("enter the ID of the client you want to UPDATE ");
-            long idToUpdate = scanner.nextInt();
-            System.out.println("Enter the new Last Name");
-            String newTitle = scanner.next();
-            System.out.println("Enter the new First Name");
-            String newAuthor = scanner.next();
-            this.clientService.updateClient(idToUpdate, newTitle, newAuthor);
-
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    private void deleteClientFromFile() throws IOException {
-        System.out.println("Enter the ID of the client you want to delete  ");
-        Scanner scanner = new Scanner(System.in);
-        long id = scanner.nextLong();
-        clientService.deleteClient(id);
-    }
-
-    private void deleteClientFromXMLByLastName() throws ParserConfigurationException, IOException, SAXException, TransformerException {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter the last name you want to delete ");
-        String clientToDelete = scanner.next();
-
-        List<Client> clients = ClientXmlRepository.deleteFromXmlByClientLastName(clientToDelete);
-
-
-    }
-
-    private List<Client> updateLastNameFromXML() throws ParserConfigurationException, IOException, TransformerException, SAXException {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("enter the last name to update: ");
-        String lastNameToUpdate = sc.next();
-        System.out.println("enter the new last name : ");
-        String newLastName = sc.next();
-        List<Client> clients = ClientXmlRepository.updateLastNameInXml(lastNameToUpdate, newLastName);
-        return clients;
-    }
-
-    private Client readClient() {
-        System.out.println("Read client {id, CNP, lastName, firstName, age}");
-
-        BufferedReader bufferRead = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            Long id = Long.valueOf(bufferRead.readLine());
-            String CNP = bufferRead.readLine();
-            String lastName = bufferRead.readLine();
-            String firstName = bufferRead.readLine();
-            int age = Integer.parseInt(bufferRead.readLine());
-
-            Client client = new Client(id, CNP, lastName, firstName, age);
-            client.setId(id);
-
-            return client;
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return null;
-    }
-
-    //BOOKS
 
     public void runSubMenuBook() throws ParserConfigurationException, IOException, TransformerException, SAXException {
         while (true) {
